@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Password</title>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+        import { getAuth, updatePassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAT8IpE5Z5iihni50KAkoFCimN7teM1Mc",
+            authDomain: "new-work-d7d07.firebaseapp.com",
+            projectId: "new-work-d7d07",
+            storageBucket: "new-work-d7d07.firebasestorage.app",
+            messagingSenderId: "331304725785",
+            appId: "1:331304725785:web:e3c10e64f2606e7167a988",
+            measurementId: "G-C75LQ9Q7C9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                console.warn("No user is currently signed in. Password change requires re-authentication");
+            }
+        });
+
+        const showMessage = (message, type = 'error') => {
+            const box = document.getElementById('message-box');
+            box.textContent = message;
+
+            box.className = 'message-box visible ' + type;
+
+            setTimeout(() => {
+                box.classList.remove('visible');
+            }, 5000);
+        };
+        window.showMessage = showMessage;
+
+        const resetPassword = () => {
+            const resetBtn = document.getElementById('reset-btn');
+            const newPasswordInput = document.getElementById('newPassword');
+            const rePasswordInput = document.getElementById('rePassword');
+            const box = document.getElementById('message-box');
+
+            const newPassword = newPasswordInput.value.trim();
+            const rePassword = rePasswordInput.value.trim();
+
+            box.classList.remove('visible');
+            resetBtn.disabled = true;
+            resetBtn.classList.add('disabled');
+
+            newPasswordInput.value = '';
+            rePasswordInput.value = '';
+
+            if (newPassword === '' || rePassword === '') {
+                showMessage('Please fill in both password fields.', 'error');
+                resetBtn.disabled = false;
+                resetBtn.classList.remove('disabled');
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                showMessage('Password should be at least 8 characters long.', 'error');
+                resetBtn.disabled = false;
+                resetBtn.classList.remove('disabled');
+                return;
+            }
+
+            if (newPassword !== rePassword) {
+                showMessage('Passwords do not match. Please try again.', 'error');
+                resetBtn.disabled = false;
+                resetBtn.classList.remove('disabled');
+                return;
+            }
+
+            showMessage('Attempting to reset password...', 'info');
+
+            const user = auth.currentUser;
+
+            if (!user) {
+                showMessage("Authentication required. Please sign in or re-authenticate before changing your password.", 'error');
+                resetBtn.disabled = false;
+                resetBtn.classList.remove('disabled');
+                return;
+            }
+
+            updatePassword(user, newPassword)
+                .then(() => {
+                    showMessage('Password updated successfully! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'signin.html';
+                    }, 1500);
+                })
+                .catch((error) => {
+                    console.error("Firebase Error:", error.code, error.message);
+
+                    let friendlyMessage = 'Failed to update password. Please try signing in again and trying immediately.';
+
+                    if (error.code === 'auth/requires-recent-login') {
+                        friendlyMessage = 'This action requires a recent login. Please sign out, sign back in, and try changing your password immediately.';
+                    } else if (error.message) {
+                        friendlyMessage = error.message;
+                    }
+
+                    showMessage(`Error: ${friendlyMessage}`, 'error');
+                })
+                .finally(() => {
+                    resetBtn.disabled = false;
+                    resetBtn.classList.remove('disabled');
+                });
+        }
+        window.resetPassword = resetPassword;
+    </script>
+
+    <style>
+        :root {
+            --primary-teal: #4f7174;
+            --custom-dark-blue: rgb(19, 19, 85);
+            --custom-dark-blue-hover: rgb(10, 10, 50);
+            --background-light: #f4f4f4;
+            --card-background: #ffffff;
+            --text-dark: #555555;
+            --text-secondary: #777777;
+            --headline-brown: #7B4734;
+            --border-radius-large: 30px;
+            --border-radius-small: 12px;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #app-wrapper {
+            width: 100%;
+            max-width: 420px;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 40px;
+            margin: 20px;
+            margin-top: 50px;
+            align-self: center;
+        }
+
+        .top-graphic {
+            height: 100px;
+            background-color: var(--custom-dark-blue);
+            border-radius: 0 0 50% 50% / 0 0 10% 10%;
+            margin-bottom: -50px;
+        }
+
+        .content {
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--headline-brown);
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            padding: 0;
+            text-align: center;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+            padding-left: 0;
+            text-align: left;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 15px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius-small);
+            background-color: #f8f8f8;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+            text-align: left;
+        }
+
+        input:focus {
+            border-color: var(--primary-teal);
+            outline: none;
+            box-shadow: 0 0 5px rgba(79, 113, 116, 0.2);
+        }
+
+        #reset-btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: white;
+            background-color: var(--custom-dark-blue);
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(19, 19, 85, 0.4);
+            margin-top: 2rem;
+        }
+
+        #reset-btn:hover:not(:disabled) {
+            background-color: var(--custom-dark-blue-hover);
+        }
+
+        #reset-btn.disabled,
+        #reset-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        #message-box {
+            display: none;
+            min-height: 30px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid;
+            text-align: left;
+        }
+
+        #message-box.visible {
+            display: block;
+        }
+
+        .message-box.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .message-box.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .message-box.info {
+            background-color: #cce5ff;
+            color: #004085;
+            border-color: #b8daff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-wrapper">
+        <div class="top-graphic"></div>
+
+        <div class="content">
+            <h4>Change Your Password</h4>
+            <p>Enter a new password below to change your account password.</p>
+
+            <div id="message-box">
+            </div>
+
+            <form>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password">
+                </div>
+
+                <div class="form-group">
+                    <label for="rePassword">Re-enter New Password</label>
+                    <input type="password" id="rePassword" placeholder="Re-enter new password">
+                </div>
+            </form>
+
+            <button onclick="resetPassword()" id="reset-btn">
+                Reset Password
+            </button>
+        </div>
+    </div>
+</body>
+
+</html>

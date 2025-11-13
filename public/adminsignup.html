@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin/Service Provider Sign Up</title>
+
+    <script>
+        const showMessage = (message, type = 'error') => {
+            const box = document.getElementById('message-box');
+            box.textContent = message;
+            box.className = 'message-box visible ' + type;
+
+            setTimeout(() => {
+                box.classList.remove('visible');
+            }, 5000);
+        };
+        window.showMessage = showMessage;
+
+        const signUserNext = () => {
+            const nextButton = document.getElementById('next-btn');
+            const box = document.getElementById('message-box');
+
+            const firstName = document.getElementById('firstName').value.trim();
+            const secondName = document.getElementById('secondName').value.trim();
+            const countries = document.getElementById('countries').value.trim();
+            const states = document.getElementById('states').value.trim();
+            const cities = document.getElementById('cities').value.trim();
+
+            box.classList.remove('visible');
+
+            nextButton.disabled = true;
+            nextButton.classList.add('disabled');
+
+            if (firstName === '' || secondName === '' || countries === '' || states === '' || cities === '') {
+                showMessage('Please fill in all inputs before proceeding.', 'error');
+
+                nextButton.disabled = false;
+                nextButton.classList.remove('disabled');
+                return;
+            } else {
+                localStorage.setItem('firstName', firstName.toLowerCase());
+                localStorage.setItem('secondName', secondName.toLowerCase());
+                localStorage.setItem('countries', countries.toLowerCase());
+                localStorage.setItem('states', states.toLowerCase());
+                localStorage.setItem('cities', cities.toLowerCase());
+
+                setTimeout(() => {
+                    window.location.href = 'adminsignup2.html'
+                }, 1500)
+            }
+        }
+
+        const logIn = () => {
+            showMessage("Redirecting to Log In page (Not implemented in this single file demo).", 'info');
+        };
+
+
+        window.onload = function () {
+            document.getElementById('next-btn').addEventListener('click', signUserNext);
+        };
+        window.signUserNext = signUserNext;
+        window.logIn = logIn;
+    </script>
+
+    <style>
+        :root {
+            --primary-teal: #4f7174;
+            --custom-dark-blue: rgb(19, 19, 85);
+            --custom-dark-blue-hover: rgb(10, 10, 50);
+            --background-light: #f4f4f4;
+            --card-background: #ffffff;
+            --text-dark: #555555;
+            --text-secondary: #777777;
+            --headline-brown: #7B4734;
+            --border-radius-large: 30px;
+            --border-radius-small: 12px;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #app-wrapper {
+            width: min(420px, calc(100% - 40px));
+            max-width: 420px;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 40px;
+            margin: 50px auto 20px;
+            box-sizing: border-box;
+        }
+
+        .top-graphic {
+            height: 100px;
+            background-color: var(--custom-dark-blue);
+            border-radius: 0 0 50% 50% / 0 0 10% 10%;
+            margin-bottom: -50px;
+        }
+
+        .content {
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .content h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .content p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            padding: 0;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            padding-left: 0;
+            padding-right: 0;
+            text-align: left;
+        }
+
+        .content label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+            padding-left: 0;
+            text-align: left;
+        }
+
+        .content input[type="text"],
+        .content input[type="email"],
+        .content input[type="number"],
+        .content select {
+            width: 100%;
+            padding: 15px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius-small);
+            background-color: #f8f8f8;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+            text-align: left;
+        }
+
+        .content input:focus,
+        .content select:focus {
+            border-color: var(--primary-teal);
+            outline: none;
+            box-shadow: 0 0 5px rgba(79, 113, 116, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .button-group.single-button {
+            justify-content: center;
+        }
+
+
+        .button-group button {
+            width: unset;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        #back-btn {
+            background-color: var(--card-background);
+            color: var(--custom-dark-blue);
+            border: 2px solid var(--custom-dark-blue);
+            flex-grow: 1;
+        }
+
+        #back-btn:hover {
+            background-color: var(--custom-dark-blue);
+            color: white;
+        }
+
+        #next-btn {
+            color: white;
+            background-color: var(--custom-dark-blue);
+            box-shadow: 0 4px 10px rgba(19, 19, 85, 0.4);
+            flex-grow: 1;
+        }
+
+        #next-btn:hover:not(:disabled) {
+            background-color: var(--custom-dark-blue-hover);
+        }
+
+        #next-btn.disabled,
+        #next-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .login-link {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            text-align: center !important;
+        }
+
+        .login-link a {
+            color: var(--primary-teal);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .message-box {
+            display: none;
+            min-height: 30px;
+            transition: none;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid;
+            text-align: left;
+        }
+
+        .message-box.visible {
+            display: block;
+        }
+
+        .message-box.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .message-box.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .message-box.info {
+            background-color: #cce5ff;
+            color: #004085;
+            border-color: #b8daff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-wrapper">
+        <div class="top-graphic"></div>
+
+        <div class="content">
+            <h4>Create Your Artisan Connect Account as an Admin/Service Provider.</h4>
+            <p>Register to offer your professional services to thousands of customers.</p>
+
+            <div id="message-box">
+            </div>
+
+            <form>
+                <div class="form-group">
+                    <label for="fName">First Name</label>
+                    <input type="text" placeholder="Enter First Name" id="firstName">
+                </div>
+
+                <div class="form-group">
+                    <label for="sName">Last Name</label>
+                    <input type="text" placeholder="Enter Last Name" id="secondName">
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select name="Country" id="countries">
+                        <option value="">Select Country</option>
+                        <option value="algeria">Algeria</option>
+                        <option value="angola">Angola</option>
+                        <option value="benin">Benin</option>
+                        <option value="botswana">Botswana</option>
+                        <option value="burkina-faso">Burkina Faso</option>
+                        <option value="burundi">Burundi</option>
+                        <option value="cameroon">Cameroon</option>
+                        <option value="cape-verde">Cape Verde</option>
+                        <option value="cote-divoire">Cote D'Ivoire (Ivory Coast)</option>
+                        <option value="egypt">Egypt</option>
+                        <option value="ethopia">Ethopia</option>
+                        <option value="french-southern-territories">French Southern Territories</option>
+                        <option value="gabon">Gabon</option>
+                        <option value="ghana">Ghana</option>
+                        <option value="kenya">Kenya</option>
+                        <option value="liberia">Liberia</option>
+                        <option value="mali">Mali</option>
+                        <option value="maritius">Maritius</option>
+                        <option value="namibia">Namibia</option>
+                        <option value="niger">Niger</option>
+                        <option value="nigeria">Nigeria</option>
+                        <option value="rwanda">Rwanda</option>
+                        <option value="somalia">Somalia</option>
+                        <option value="south-africa">South Africa</option>
+                        <option value="tanzania">Tanzania</option>
+                        <option value="togo">Togo</option>
+                        <option value="uganda">Uganda</option>
+                        <option value="western-sahara">Western sahara</option>
+                        <option value="zambia">Zambia</option>
+                        <option value="zimbabwe">Zimbabwe</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <select name="State" id="states">
+                        <option value="">Select State</option>
+                        <option value="Lagos">Lagos</option>
+                        <option value="Oyo">Oyo</option>
+                        <option value="Osun">Osun</option>
+                        <option value="Abia">Abia</option>
+                        <option value="Ogun">Ogun</option>
+                        <option value="Akwa Ibom">Akwa Ibom</option>
+                        <option value="Anambra">Anambra</option>
+                        <option value="Bauchi">Bauchi</option>
+                        <option value="Bayelsa">Bayelsa</option>
+                        <option value="Benue">Benue</option>
+                        <option value="Borno">Borno</option>
+                        <option value="Cross River">Cross River</option>
+                        <option value="Delta">Delta</option>
+                        <option value="Ebonyi">Ebonyi</option>
+                        <option value="Edo">Edo</option>
+                        <option value="Ekiti">Ekiti</option>
+                        <option value="Enugu">Enugu</option>
+                        <option value="Gombe">Gombe</option>
+                        <option value="Imo">Imo</option>
+                        <option value="Jigawa">Jigawa</option>
+                        <option value="Kaduna">Kaduna</option>
+                        <option value="Kano">Kano</option>
+                        <option value="Katsina">Katsina</option>
+                        <option value="Kebbi">Kebbi</option>
+                        <option value="Kogi">Kogi</option>
+                        <option value="Kwara">Kwara</option>
+                        <option value="Nasarawa">Nasarawa</option>
+                        <option value="Niger">Niger</option>
+                        <option value="Ogun">Ogun</option>
+                        <option value="Ondo">Ondo</option>
+                        <option value="Osun">Osun</option>
+                        <option value="Oyo">Oyo</option>
+                        <option value="Plateau">Plateau</option>
+                        <option value="Rivers">Rivers</option>
+                        <option value="Sokoto">Sokoto</option>
+                        <option value="Taraba">Taraba</option>
+                        <option value="Yobe">Yobe</option>
+                        <option value="Zamfara">Zamfara</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <select name="City" id="cities">
+                        <option value="">Select City</option>
+                        <option value="Agege">Agege</option>
+                        <option value="Ogbomosho">Ogbomosho</option>
+                        <option value="Osogbo">osogbo</option>
+                        <option value="Benin">Benin</option>
+                        <option value="Aba">Aba</option>
+                        <option value="Abuja">Abuja</option>
+                        <option value="Ibadan">Ibadan</option>
+                        <option value="Port Harcourt">Port Harcourt</option>
+                        <option value="Kano">Kano</option>
+                        <option value="Kaduna">Kaduna</option>
+                        <option value="Katsina">Katsina</option>
+                        <option value="Gombe">Gombe</option>
+                        <option value="Akwa">Akwa</option>
+                        <option value="Bida">Bida</option>
+                        <option value="Sokoto">Sokoto</option>
+                        <option value="Onitsha">Onitsha</option>
+                        <option value="Ilesa">Ilesa</option>
+                        <option value="Maiduguri">Maiduguri</option>
+                        <option value="Owerri">Owerri</option>
+                        <option value="Sagamu">Sagamu</option>
+                        <option value="Minna">Minna</option>
+                        <option value="Enugu">Enugu</option>
+                        <option value="Ikeja">Ikeja</option>
+                        <option value="Abakaliki">Abakaliki</option>
+                        <option value="Calabar">Calabar</option>
+                        <option value="Akure">Akure</option>
+                        <option value="Bauchi">Bauchi</option>
+                        <option value="Ado Ekiti">Ado Ekiti</option>
+                        <option value="Ikare">Ikare</option>
+                        <option value="Ife">Ife</option>
+                        <option value="Jos">Jos</option>
+                        <option value="Warri">Warri</option>
+                        <option value="Ilorin">Ilorin</option>
+                        <option value="Sapele">Sapele</option>
+                        <option value="Ilobu">Ilobu</option>
+                        <option value="Owo">Owo</option>
+                        <option value="Ijebu">Ijebu</option>
+                        <option value="Kabba">Kabba</option>
+                    </select>
+                </div>
+            </form>
+
+            <div class="button-group single-button" style="margin-top: 2.5rem;">
+                <button onclick="signUserNext()" id="next-btn">
+                    Next
+                </button>
+            </div>
+
+            <div class="login-link">
+                Already have an account? <a href="signin.html" onclick="logIn()">Sign In Here</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

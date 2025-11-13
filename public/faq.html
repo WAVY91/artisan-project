@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ</title>
+    <link rel="stylesheet" href="styl.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow fixed-top">
+        <div class="container-fluid w-75 mx-auto">
+            <h1 class="text-primary-emphasis fw-bold">Artisans</h1>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <img src="/images/list-1294835_1280 (1).png" alt="" width="25px">
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active p-3" aria-current="page" href="index.html">Home</a>
+                    <a class="nav-link p-3" href="about.html">About Us</a>
+                    <a class="nav-link p-3" href="signintwo.html">Browse Workers</a>
+                    <a class="nav-link p-3" href="contact.html">Contact Us</a>
+                    <button class="m-2" type="button" id="login" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Log In</button>
+                    <button class="m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" type="button">Sign
+                        Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Go for the right post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="logInA()" class="m-2 fw-bold" id="hero" type="submit">Login as an
+                        Artisan</button>
+                    <button onclick="logInC()" class="m-2 fw-bold" type="submit">Login as a
+                        customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Go for the right
+                        post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="registerUser()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Artisan</button>
+                    <button onclick="registerCustomer()" class="m-2 fw-bold" type="submit">Register as a
+                        customer</button>
+                    <button onclick="registerAdmin()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Admin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="text-hero text-center">
+        <h1 class="aboutText m-0">FAQs</h1>
+    </section>
+
+    <section class="faq-section">
+        <h2 class="text-topic fw-bolder text-center">
+            Frequently Asked Questions
+
+        </h2>
+        <div class="container"> 
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-4">
+                    <div class="question-section p-4 bg-white rounded shadow-sm">
+                        <h4>Have a Question?</h4>
+                        <p class="text-muted mb-3">Can’t find your answer above? Ask your question below.
+
+                        </p>
+                        <form id="questionForm">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Your Name</label>
+                                <input type="text" id="name" class="form-control form-control-lg"
+                                    placeholder="Enter your name" required>
+                            </div>
+                            <div class="mb-3"> <label for="question" class="form-label">Your Question
+                                </label>
+                                <textarea id="question" class="form-control form-control-lg" rows="3"
+                                    placeholder="Type your question..." required>
+                                </textarea>
+                            </div>
+                            <button type="submit" class="m-2" onclick="subQuest()">Submit Question
+                            </button>
+                        </form>
+                        <div id="successMsg" class="text-success mt-3 fw-bold" style="display:none;">✅ Your question has
+                            been
+                            sent successfully!
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="col-12 col-md-10 col-lg-8">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button fw-bold fs-5" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq1"> 1. What is Artisan Connect?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Artisan Connect is a platform that connects skilled
+                                    workers
+                                    with people who need their services.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq2"> 2. Who can use
+                                    Artisan
+                                    Connect?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Both artisans (like tailors, plumbers, electricians)
+                                    and
+                                    customers looking for their services.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq3"> 3. Is it free to
+                                    create
+                                    an account?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Yes, creating an account on Artisan Connect is
+                                    completely
+                                    free.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq4"> 4. How do I sign up
+                                    as
+                                    an artisan?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Download the app or visit the website, click “Sign
+                                    Up,”
+                                    and
+                                    choose “Artisan.” Fill in your skill details and start connecting.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq5"> 5. How do I hire an
+                                    artisan?
+                                </button>
+                            </h2>
+                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Search by service or location, view artisan profiles,
+                                    and
+                                    contact the one that fits your need.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq6"> 6. Can I chat with
+                                    artisans before hiring?
+                                </button>
+                            </h2>
+                            <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Yes, you can chat directly to discuss details,
+                                    pricing,
+                                    and
+                                    availability.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq7"> 7. Are all artisans
+                                    verified?
+                                </button>
+                            </h2>
+                            <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Yes, we verify artisans to ensure trust and safety for
+                                    all
+                                    users.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq8"> 8. How can I trust
+                                    the
+                                    artisan I’m hiring?
+                                </button>
+                            </h2>
+                            <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> You can check their ratings, reviews, and completed
+                                    jobs
+                                    before hiring.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq9"> 9. Can I post a job
+                                    request?
+                                </button>
+                            </h2>
+                            <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Yes, employers can post the kind of work they need,
+                                    and
+                                    artisans can apply.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq10"> 10. What if I’m not
+                                    satisfied with the
+                                    job?
+                                </button>
+                            </h2>
+                            <div id="faq10" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> You can report the issue through the app and our
+                                    support
+                                    team
+                                    will review it.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq11"> 11. Do artisans pay
+                                    to
+                                    get listed?
+                                </button>
+                            </h2>
+                            <div id="faq11" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> No, listing is free — but we may offer premium
+                                    visibility
+                                    options later.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq12"> 12. Can I update my
+                                    artisan profile?
+                                </button>
+                            </h2>
+                            <div id="faq12" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Yes, you can edit your profile anytime to add new
+                                    skills,
+                                    images, or contact info.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq13"> 13. How do I reset
+                                    my
+                                    password?
+                                </button>
+                            </h2>
+                            <div id="faq13" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Go to the login page and click “Forgot Password” to
+                                    reset
+                                    it
+                                    easily.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq14"> 14. Can I use the
+                                    app
+                                    on my phone?
+                                </button>
+                            </h2>
+                            <div id="faq14" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Yes, Artisan Connect works perfectly on both mobile
+                                    and
+                                    desktop.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq15"> 15. Is my personal
+                                    data
+                                    safe?
+                                </button>
+                            </h2>
+                            <div id="faq15" class="accordion-collapse collapse " data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Absolutely — we value your privacy and keep your
+                                    information
+                                    secure.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq16"> 16. Can customers
+                                    rate
+                                    artisans?
+                                </button>
+                            </h2>
+                            <div id="faq16" class="accordion-collapse collapse fw-bold fs-2"
+                                data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Yes! After a job is done, customers can leave honest
+                                    ratings
+                                    and feedback.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq17"> 17. How do I become
+                                    a
+                                    verified artisan?
+                                </button>
+                            </h2>
+                            <div id="faq17" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Submit valid ID and proof of skill during registration
+                                    —
+                                    our
+                                    team will verify your details.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq18"> 18. Can I delete my
+                                    account?
+                                </button>
+                            </h2>
+                            <div id="faq18" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Yes, you can delete your account anytime in the app
+                                    settings.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq19"> 19. Do I need
+                                    internet
+                                    to use Artisan
+                                    Connect?
+                                </button>
+                            </h2>
+                            <div id="faq19" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> Yes, you need an internet connection to browse, chat,
+                                    or
+                                    post
+                                    jobs.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faq20"> 20. Who do I
+                                    contact
+                                    for help?
+                                </button>
+                            </h2>
+                            <div id="faq20" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body fs-6"> You can reach us through the Contact Us page or email
+                                    our
+                                    support team.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="footer">
+        <div class="row flex-column-reverse flex-lg-row justify-content-around align-items-center text-center">
+            <div class=" col-11 col-xlg-4 col-xxlg-4 col-lg-5 col-sm-11 col-md-11 text-center text-white b-2">
+                © 2025 Artisan | All Rights Reserved.
+            </div>
+            <div class=" col-11 col-xlg-4 col-xxlg-4 col-lg-5 col-sm-11 col-md-11 text-center">
+                <a href="about.html" class="text-white text-decoration-none mx-2">About</a>
+                <a href="FAQ.html" class="text-white text-decoration-none mx-2">FAQ</a>
+                <a href="contact.html" class="text-white text-decoration-none mx-2">Contact</a>
+                <a href="privacy.html" class="text-white text-decoration-none mx-2">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDocTQeWER_kb6mxqNlmbv04M0339iaDDM",
+            authDomain: "project-8bb29.firebaseapp.com",
+            databaseURL: "https://project-8bb29-default-rtdb.firebaseio.com",
+            projectId: "project-8bb29",
+            storageBucket: "project-8bb29.firebasestorage.app",
+            messagingSenderId: "792700267479",
+            appId: "1:792700267479:web:d491f80fcd4c105faf3992",
+            measurementId: "G-KY94VPFHX5",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const subQuest = () => {
+            event.preventDefault();
+            const name = document.getElementById("name").value.trim().toLowerCase();
+            const question = document.getElementById("question").value.trim().toLowerCase();
+
+            if (!name || !question) {
+                alert("Please fill in all input fields");
+                return;
+            }
+
+            const frequent = {
+                name,
+                question,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
+            };
+
+            const frequentRef = ref(database, "Questions");
+            push(frequentRef, frequent)
+                .then(() => {
+                    alert("Message sent successfully!");
+                    document.getElementById("name").value = "";
+                    document.getElementById("question").value = "";
+                })
+                .catch((error) => {
+                    alert("Error sending message: " + error.message);
+                });
+        };
+
+        window.subQuest = subQuest;
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

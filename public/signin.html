@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In Artisan</title>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import {
+            getAuth,
+            signInWithEmailAndPassword,
+            GoogleAuthProvider,
+            signInWithPopup
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+        import {
+            getDatabase,
+            ref,
+            get
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        const showMessage = (message, type = 'error') => {
+            const box = document.getElementById('message-box');
+            box.textContent = message;
+            box.className = 'message-box visible ' + type;
+
+            setTimeout(() => {
+                box.classList.remove('visible');
+            }, 5000);
+        };
+        window.showMessage = showMessage;
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDocTQeWER_kb6mxqNlmbv04M0339iaDDM",
+            authDomain: "project-8bb29.firebaseapp.com",
+            databaseURL: "https://project-8bb29-default-rtdb.firebaseio.com",
+            projectId: "project-8bb29",
+            storageBucket: "project-8bb29.firebasestorage.app",
+            messagingSenderId: "792700267479",
+            appId: "1:792700267479:web:d491f80fcd4c105faf3992",
+            measurementId: "G-KY94VPFHX5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        const provider = new GoogleAuthProvider();
+
+        const ADMIN_EMAILS = ["timetomisin@gmail.com", "zeenatayomiposi@gmail.com"];
+
+        const encodeEmail = (email) => btoa(email).replace(/[.#$/\[\]]/g, "_");
+
+        async function checkIfBanned(email) {
+            const bannedRef = ref(db, "bannedUsers/" + encodeEmail(email));
+            const snap = await get(bannedRef);
+            return snap.exists();
+        }
+
+        const logUserIn = async () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const loginButton = document.getElementById('login-btn');
+            const box = document.getElementById('message-box');
+
+            box.classList.remove('visible');
+            if (loginButton) {
+                loginButton.disabled = true;
+                loginButton.classList.add('disabled');
+            }
+
+
+            if (email === '' || password === '') {
+                showMessage('Please enter both email and password.', 'error');
+                if (loginButton) {
+                    loginButton.disabled = false;
+                    loginButton.classList.remove('disabled');
+                }
+                return;
+            }
+
+            try {
+                if (!ADMIN_EMAILS.includes(email)) {
+                    const isBanned = await checkIfBanned(email);
+                    if (isBanned) {
+                        showMessage("🚫 This account has been banned. You cannot sign in. Please contact admin.", "error");
+                        if (loginButton) {
+                            loginButton.disabled = false;
+                            loginButton.classList.remove('disabled');
+                        }
+                        return;
+                    }
+                }
+
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                if (!ADMIN_EMAILS.includes(user.email)) {
+                    try {
+                        const artisanRef = ref(db, `allArtisans/${user.uid}`);
+                        const artisanSnap = await get(artisanRef);
+                        let isArtisan = false;
+                        if (artisanSnap.exists()) {
+                            isArtisan = true;
+                        } else {
+                            const allRef = ref(db, 'allArtisans');
+                            const allSnap = await get(allRef);
+                            if (allSnap.exists()) {
+                                const data = allSnap.val();
+                                const lower = (user.email || '').toLowerCase();
+                                for (const k of Object.keys(data)) {
+                                    const item = data[k];
+                                    const candidateEmail = (item && (item.email || item.emailAddress || item.userEmail)) || '';
+                                    if (candidateEmail && candidateEmail.toLowerCase() === lower) {
+                                        isArtisan = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!isArtisan) {
+                            await auth.signOut();
+                            showMessage('This account is not registered as an artisan. Please sign in via the customer sign-in page.', 'error');
+                            if (loginButton) {
+                                loginButton.disabled = false;
+                                loginButton.classList.remove('disabled');
+                            }
+                            return;
+                        }
+                    } catch (e) {
+                        console.error('Error verifying artisan status after sign-in', e);
+                    }
+                }
+
+                showMessage('Login Successful!', 'success');
+                if (!ADMIN_EMAILS.includes(email)) {
+                    try { localStorage.setItem('postSignInRedirect', `profile2.html?id=${user.uid}`); } catch (e) { }
+                }
+                setTimeout(() => {
+                    if (ADMIN_EMAILS.includes(email)) {
+                        window.location.href = "admin.html";
+                    } else {
+                        window.location.href = `profile2.html?id=${user.uid}`;
+                    }
+                }, 700);
+
+            } catch (error) {
+                console.error("Login error:", error.message);
+                const errorCode = error.code;
+                if (errorCode === 'auth/invalid-credential' || errorCode === 'auth/user-not-found' || errorCode === 'auth/wrong-password') {
+                    showMessage('Invalid credentials entry.', 'error');
+                } else {
+                    showMessage("You don't have an Account, Please Sign Up instead.");
+                }
+                if (loginButton) {
+                    loginButton.disabled = false;
+                    loginButton.classList.remove('disabled');
+                }
+            }
+
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        };
+
+
+        const googleSignIn = async () => {
+            const box = document.getElementById('message-box');
+            box.classList.remove('visible');
+
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+
+                if (!user) return showMessage("Unable to sign in. Please try again.", "error");
+
+                if (!ADMIN_EMAILS.includes(user.email)) {
+                    const isBanned = await checkIfBanned(user.email);
+                    if (isBanned) {
+                        auth.signOut();
+                        showMessage("🚫 This account has been banned. You cannot sign in. Please contact admin.", "error");
+                        return;
+                    }
+                }
+
+                try {
+                    if (!ADMIN_EMAILS.includes(user.email)) {
+                        const allRef = ref(db, 'allArtisans');
+                        const allSnap = await get(allRef);
+                        let isArtisan = false;
+                        if (allSnap.exists()) {
+                            const data = allSnap.val();
+                            const lower = (user.email || '').toLowerCase();
+                            for (const k of Object.keys(data)) {
+                                const item = data[k];
+                                const candidateEmail = (item && (item.email || item.emailAddress || item.userEmail)) || '';
+                                if (candidateEmail && candidateEmail.toLowerCase() === lower) {
+                                    isArtisan = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!isArtisan) {
+                            await auth.signOut();
+                            showMessage('This account is not registered as an artisan. Please sign in via the customer sign-in page.', 'error');
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error checking artisan records', e);
+                }
+
+                showMessage('Login Successful!', 'success');
+                if (!ADMIN_EMAILS.includes(user.email)) {
+                    try { localStorage.setItem('postSignInRedirect', `profile2.html?id=${user.uid}`); } catch (e) { }
+                }
+                setTimeout(() => {
+                    if (ADMIN_EMAILS.includes(user.email)) {
+                        window.location.href = "admin.html";
+                    } else {
+                        window.location.href = `profile2.html?id=${user.uid}`;
+                    }
+                }, 700);
+            } catch (error) {
+                showMessage(error.message, "error");
+            }
+        };
+
+        const togglePasswordVisibility = () => {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggle-icon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '🔒';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '👁️';
+            }
+        };
+        window.togglePasswordVisibility = togglePasswordVisibility;
+        window.logUserIn = logUserIn;
+        window.googleSignIn = googleSignIn;
+    </script>
+
+    <style>
+        :root {
+            --primary-teal: #4f7174;
+            --custom-dark-blue: rgb(19, 19, 85);
+            --custom-dark-blue-hover: rgb(10, 10, 50);
+            --background-light: #f4f4f4;
+            --card-background: #ffffff;
+            --text-dark: #555555;
+            --text-secondary: #777777;
+            --headline-brown: #7B4734;
+            --border-radius-large: 30px;
+            --border-radius-small: 12px;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #app-wrapper {
+            width: min(420px, calc(100% - 40px));
+            max-width: 420px;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 40px;
+            margin: 50px auto 20px;
+            box-sizing: border-box;
+        }
+
+        .top-graphic {
+            height: 100px;
+            background-color: var(--custom-dark-blue);
+            border-radius: 0 0 50% 50% / 0 0 10% 10%;
+            margin-bottom: -50px;
+        }
+
+        .content {
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            -webkit-text-stroke: 1px rgb(0, 21, 252);
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            padding: 0;
+            text-align: center;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+            padding-left: 0;
+            text-align: left;
+        }
+
+        .password-input-container {
+            position: relative;
+            display: flex;
+        }
+
+        .password-input-container input[type="password"],
+        .password-input-container input[type="text"] {
+            flex-grow: 1;
+            padding-right: 45px;
+        }
+
+        .password-toggle-btn {
+            position: absolute;
+            right: 0px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 10;
+            color: var(--text-dark);
+            transition: opacity 0.2s;
+        }
+
+        .password-toggle-btn:focus {
+            outline: none;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius-small);
+            background-color: #f8f8f8;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+            text-align: left;
+        }
+
+        input:focus {
+            border-color: var(--primary-teal);
+            outline: none;
+            box-shadow: 0 0 5px rgba(79, 113, 116, 0.2);
+        }
+
+        .reset-link {
+            text-align: right;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .reset-link a {
+            color: var(--primary-teal);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        #login-btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: white;
+            background-color: var(--custom-dark-blue);
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(19, 19, 85, 0.4);
+            margin-top: 1rem;
+        }
+
+        #login-btn:hover:not(:disabled) {
+            background-color: var(--custom-dark-blue-hover);
+        }
+
+        #login-btn.disabled,
+        #login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .admin-login-btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: white;
+            background-color: #4CAF50;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+            margin-top: 0.5rem;
+        }
+
+        .admin-login-btn:hover:not(:disabled) {
+            background-color: #45a049;
+        }
+
+        .separator {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 1.5rem 0 1.5rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .separator::before,
+        .separator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .separator::before {
+            left: 0;
+            margin-left: 20px;
+        }
+
+        .separator::after {
+            right: 0;
+            margin-right: 20px;
+        }
+
+        .social-icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+
+        .google-icon-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: box-shadow 0.3s, background-color 0.3s;
+        }
+
+        .google-icon-btn:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .google-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .register-link {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            text-align: center !important;
+        }
+
+        .register-link a {
+            color: var(--primary-teal);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        #message-box {
+            display: none;
+            min-height: 30px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid;
+            text-align: left;
+        }
+
+        #message-box.visible {
+            display: block;
+        }
+
+        .message-box.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .message-box.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .message-box.info {
+            background-color: #cce5ff;
+            color: #004085;
+            border-color: #b8daff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-wrapper">
+        <div class="top-graphic"></div>
+
+        <div class="content">
+            <h4>Welcome Back, Our Trusted Artisan</h4>
+            <p>Connecting Skilled Artisans with Customers Who Value Quality.</p>
+            <p>Sign in to continue where you left off and manage your services effortlessly with <b>Artisan Connect.</b>
+            </p>
+
+            <div id="message-box">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" placeholder="example@gmail.com" id="email">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-input-container">
+                    <input type="password" placeholder="Password" id="password">
+                    <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility()">
+                        <span id="toggle-icon">👁️</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="reset-link">
+                <a href="reset.html">Reset Password?</a>
+            </div>
+
+            <button onclick="logUserIn()" id="login-btn">
+                Log in
+            </button>
+
+            <button onclick="logUserIn()" class="admin-login-btn">
+                log in as an Admin
+            </button>
+
+            <div class="separator">OR</div>
+
+            <div class="social-icon-container">
+                <div class="google-icon-btn" onclick="googleSignIn()">
+                    <svg class="google-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_10_2)">
+                            <path
+                                d="M12 4.8C14.05 4.8 15.75 5.51 17.06 6.78L20.41 3.42C18.36 1.34 15.3 0 12 0C7.2 0 3.16 2.69 1.18 6.6L4.82 9.51C5.7 6.94 8.52 4.8 12 4.8Z"
+                                fill="#EA4335" />
+                            <path
+                                d="M22.5 12C22.5 11.23 22.42 10.46 22.28 9.71H12V14.29H18.36C18.17 15.28 17.5 16.14 16.6 16.73L20.24 19.64C21.46 18.25 22.5 16.32 22.5 12Z"
+                                fill="#4285F4" />
+                            <path
+                                d="M4.82 14.49C4.4 13.57 4.18 12.55 4.18 11.5C4.18 10.45 4.4 9.43 4.82 8.51L1.18 5.6C0.42 7.02 0 9.24 0 11.5C0 13.76 0.42 15.98 1.18 17.4L4.82 14.49Z"
+                                fill="#FBBC05" />
+                            <path
+                                d="M12 24C15.3 24 18.36 22.66 20.41 20.62L17.06 17.27C15.75 18.54 14.05 19.25 12 19.25C8.52 19.25 5.7 17.11 4.82 14.54L1.18 17.45C3.16 21.36 7.2 24 12 24Z"
+                                fill="#34A853" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_10_2">
+                                <rect width="24" height="24" fill="white" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="register-link">
+                Don't have an account? <a href="index.html"
+                    onclick="showMessage('Redirecting to registration options.', 'info');">Register
+                    now</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

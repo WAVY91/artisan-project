@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Artisan Profile</title>
+    <link rel="stylesheet" href="styl.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow fixed-top">
+        <div class="container-fluid w-75 mx-auto">
+            <h1 class="text-primary-emphasis fw-bold">Artisans</h1>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <img src="/images/list-1294835_1280 (1).png" alt="" width="25px">
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active p-3" aria-current="page" href="index.html">Home</a>
+                    <a class="nav-link p-3" href="about.html">About Us</a>
+                    <a class="nav-link p-3" href="browsWorker2.html">Browse Workers</a>
+                    <a class="nav-link p-3" href="contact.html">Contact Us</a>
+                    <button class="m-2" type="button" id="login" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Log In</button>
+                    <button class="m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" type="button">Sign
+                        Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="logInA()" class="m-2 fw-bold" id="hero" type="submit">Login as an
+                        Artisans</button>
+                    <button onclick="logInC()" class="m-2 fw-bold" type="submit">Login as a
+                        customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Go for the right
+                        post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="registerUser()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Artisans</button>
+                    <button onclick="registerCustomer()" class="m-2 fw-bold" type="submit">Register as a
+                        customer</button>
+                    <button onclick="registerAdmin()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Admin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="text-hero text-center">
+        <h1 class="aboutText">Candidate's Profile</h1>
+    </section>
+    <div class="container py-4">
+        <div id="profileArea" class="mt-3"></div>
+    </div>
+
+    <div class="modal fade" id="hireModal" tabindex="-1" aria-labelledby="hireModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hireModalTitle">Hire</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="artisanShortInfo" class="mb-2 text-muted"></div>
+
+                    <h6 class="mb-2">Select a service</h6>
+                    <div id="servicesList" class="list-group mb-3"></div>
+
+                    <div class="mb-3">
+                        <label for="customerNote" class="form-label">Note (optional)</label>
+                        <textarea id="customerNote" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="sendRequestBtn" class="btn btn-primary">Send Request</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, get, push, set } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDocTQeWER_kb6mxqNlmbv04M0339iaDDM",
+            authDomain: "project-8bb29.firebaseapp.com",
+            databaseURL: "https://project-8bb29-default-rtdb.firebaseio.com",
+            projectId: "project-8bb29",
+            storageBucket: "project-8bb29.firebasestorage.app",
+            messagingSenderId: "792700267479",
+            appId: "1:792700267479:web:d491f80fcd4c105faf3992",
+            measurementId: "G-KY94VPFHX5",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        let currentUser = null;
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+        });
+
+        const urlParams = new URLSearchParams(location.search);
+        const id = urlParams.get('id');
+        const profileArea = document.getElementById('profileArea');
+
+        let currentArtisan = null;
+        let currentSelection = {};
+
+        if (!id) {
+            profileArea.innerHTML = '<div class="alert alert-warning">No artisan selected.</div>';
+        } else {
+            try {
+                const snapRef = ref(database, `allArtisans/${id}`);
+
+                const findArtisanByEmail = async (email) => {
+                    if (!email) return null;
+                    try {
+                        const allRef = ref(database, `allArtisans`);
+                        const allSnap = await get(allRef);
+                        if (!allSnap.exists()) return null;
+                        const data = allSnap.val();
+                        for (const key of Object.keys(data)) {
+                            const item = data[key];
+                            if (!item) continue;
+                            const candidateEmail = item.email || item.emailAddress || item.userEmail;
+                            if (candidateEmail && candidateEmail.toLowerCase() === email.toLowerCase()) {
+                                return { key, val: item };
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Error searching artisans by email', e);
+                    }
+                    return null;
+                };
+
+                let a = null;
+                get(snapRef).then(async (snap) => {
+                    if (!snap.exists()) {
+                        let matched = null;
+                        if (currentUser && currentUser.email) {
+                            matched = await findArtisanByEmail(currentUser.email);
+                        } else {
+                            const waitForUser = (timeout = 1500) => new Promise((resolve) => {
+                                const start = Date.now();
+                                const tick = async () => {
+                                    if (currentUser && currentUser.email) return resolve(currentUser);
+                                    if (Date.now() - start > timeout) return resolve(null);
+                                    setTimeout(tick, 150);
+                                };
+                                tick();
+                            });
+                            const u = await waitForUser(1500);
+                            if (u && u.email) matched = await findArtisanByEmail(u.email);
+                        }
+
+                        if (matched) {
+                            a = matched.val;
+                            currentArtisan = a;
+                            console.info('Using artisan record found by email for key', matched.key);
+                        } else {
+                            profileArea.innerHTML = '<div class="alert alert-danger">Artisan not found.</div>';
+                            return;
+                        }
+                    } else {
+                        a = snap.val();
+                        currentArtisan = a;
+                    }
+
+                    profileArea.innerHTML = `
+                <div class="container">
+                    <div class="row g-1 gap-5 justify-content-center">
+                        <div class="col-11 col-md-11 col-lg-4">
+                            <div class="card mb-3" style="max-width: 540px;">
+                                <div class="row g-0">
+                                    <div class="col-6 row">
+                                        <img src="/images/passport.jpg" class="img-fluid rounded-circle" alt="...">
+                                        <h5 class="text-center">${a.firstName || ''}</h5>
+                                    </div>
+                                    <div class="col-6 mx-auto">
+                                        <div class="card-body position-relative ">
+                                            <p class="position-absolute top-0 end-0 shadow p-2 mt-2 me-2 text-white fw-bold">TopRated</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-3">
+                                    <div class="d-flex justify-content-between border-bottom p-1 my-2">
+                                        <p>Location</p>
+                                        <p>${a.city || ''}, ${a.state || ''} State</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between border-bottom p-1 my-2">
+                                        <p>Experience</p>
+                                        <p>${a.yearsOfExperience || ''}</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between border-bottom p-1 my-2">
+                                        <p>Job Preference</p>
+                                        <p>${a.selectJob || ''}</p>
+                                    </div>
+                                    <button class="hire-btn m-2">Hire Me</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-11 col-md-10 col-lg-7">
+                            <h3 class="text-start fw-bolder text-topic border-bottom p-3">About Me</h3>
+                            <p>${a.jobDescription || ''}</p>
+                            <h3 class="text-start fw-bolder text-topic border-bottom ">School</h3>
+                            <p>${a.school || ''}</p>
+                            <h3 class="text-start fw-bolder text-topic border-bottom ">Education</h3>
+                            <p>${a.certificate || ''}</p>
+                            <h3 class="text-start fw-bolder text-topic border-bottom p-3">Services</h3>
+                            <ul>
+                                ${a.services
+                            ? Object.values(a.services)
+                                .map(service => `<li>${service}</li>`)
+                                .join('')
+                            : '<li>No services listed</li>'
+                        }
+                            </ul>
+                            <h3 class="text-start fw-bolder text-topic border-bottom p-3">Work Experience</h3>
+                            <p>${a.yearsOfExperience || ''}</p>
+                            <h3 class="text-start fw-bolder text-topic border-bottom p-3">Gender</h3>
+                            <p>${a.gender || ''}</p>
+                            <h3 class="text-start fw-bolder text-topic border-bottom p-3">Country</h3>
+                            <p>${a.country || ''}</p>
+                        </div>
+                    </div>
+                </div>
+                `;
+
+                    const hireBtn = document.querySelector('.hire-btn');
+                    if (hireBtn) {
+                        hireBtn.addEventListener('click', async (e) => {
+                            if (hireBtn.disabled) {
+                                showTopAlert('Only customers can hire an artisan.', 'warning');
+                                return;
+                            }
+
+                            if (!currentUser) {
+                                openHireModal(id, currentArtisan);
+                                return;
+                            }
+
+                            try {
+                                if (currentUser.uid === id) {
+                                    showTopAlert('You cannot hire yourself.', 'warning');
+                                    return;
+                                }
+
+                                const viewerArtisanRef = ref(database, `allArtisans/${currentUser.uid}`);
+                                const viewerSnap = await get(viewerArtisanRef);
+                                if (viewerSnap.exists()) {
+                                    showTopAlert('Only customers can hire an artisan.', 'warning');
+                                    return;
+                                }
+
+                                openHireModal(id, currentArtisan);
+                            } catch (err) {
+                                console.error('Error checking viewer role', err);
+                                openHireModal(id, currentArtisan);
+                            }
+                        });
+
+                        (async () => {
+                            try {
+                                if (currentUser) {
+                                    if (currentUser.uid === id) {
+                                        hireBtn.disabled = true;
+                                        hireBtn.classList.add('disabled');
+                                        hireBtn.textContent = 'Customers only';
+                                        return;
+                                    }
+                                    const viewerArtisanRef = ref(database, `allArtisans/${currentUser.uid}`);
+                                    const viewerSnap = await get(viewerArtisanRef);
+                                    if (viewerSnap.exists()) {
+                                        hireBtn.disabled = true;
+                                        hireBtn.classList.add('disabled');
+                                        hireBtn.textContent = 'Customers only';
+                                    }
+                                }
+                            } catch (e) {
+                                console.error('Error pre-checking viewer role', e);
+                            }
+                        })();
+                    }
+                });
+            } catch (err) {
+                console.error(err);
+                profileArea.innerHTML = '<div class="alert alert-danger">Error loading profile.</div>';
+            }
+        }
+
+        const hireModalEl = document.getElementById('hireModal');
+        let hireModal = null;
+        if (hireModalEl && window.bootstrap) {
+            hireModal = new bootstrap.Modal(hireModalEl);
+        }
+
+        const hireModalTitle = document.getElementById('hireModalTitle');
+        const artisanShortInfo = document.getElementById('artisanShortInfo');
+        const servicesList = document.getElementById('servicesList');
+        const customerNote = document.getElementById('customerNote');
+        const sendRequestBtn = document.getElementById('sendRequestBtn');
+
+        function showTopAlert(message, type = 'success', timeout = 4500) {
+            const existing = document.querySelectorAll('.top-alert-fixed');
+            existing.forEach(e => e.remove());
+
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} top-alert-fixed position-fixed bottom-0 start-50 translate-middle-x mb-3`;
+            alert.style.zIndex = 1060;
+            alert.setAttribute('role', 'alert');
+            alert.innerHTML = message;
+
+            document.body.appendChild(alert);
+
+            if (timeout > 0) {
+                setTimeout(() => {
+                    alert.classList.add('fade');
+                    alert.addEventListener('transitionend', () => alert.remove(), { once: true });
+                    setTimeout(() => alert.remove(), 600);
+                }, timeout);
+            }
+        }
+
+        function openHireModal(artisanId, artisan) {
+            currentSelection = {
+                artisanId,
+                serviceId: null,
+                serviceName: null,
+                price: null,
+                artisanName: artisan.firstName || ''
+            };
+
+            if (hireModalTitle) hireModalTitle.textContent = `Hire ${artisan.firstName || 'Artisan'}`;
+
+            if (artisanShortInfo) {
+                artisanShortInfo.textContent = artisan.city
+                    ? `${artisan.jobCategory || ''} for ${artisan.city}, ${artisan.state || ''} State : ${artisan.skill || ''}`
+                    : `${artisan.jobCategory || ''}`;
+            }
+
+            if (!servicesList) return;
+            servicesList.innerHTML = '';
+
+            const services = artisan.services || {};
+            const keys = Object.keys(services);
+
+            if (keys.length === 0) {
+                servicesList.innerHTML = '<div class="text-muted small">No services listed by this artisan.</div>';
+            } else {
+                keys.forEach(k => {
+                    const serviceText = services[k];
+                    const item = document.createElement('button');
+                    item.type = 'button';
+                    item.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+                    item.innerHTML = `<div class="text-start fw-semibold">${serviceText}</div>`;
+
+                    item.addEventListener('click', () => {
+                        document.querySelectorAll('#servicesList .active').forEach(n => n.classList.remove('active'));
+                        item.classList.add('active');
+
+                        currentSelection.serviceId = k;
+                        currentSelection.serviceName = serviceText;
+                        if (typeof serviceText === 'object' && serviceText !== null) {
+                            currentSelection.serviceName = serviceText.name || JSON.stringify(serviceText);
+                            currentSelection.price = serviceText.price || currentSelection.price;
+                        }
+                    });
+
+                    servicesList.appendChild(item);
+                });
+            }
+
+            if (customerNote) customerNote.value = '';
+            if (hireModal) hireModal.show();
+        }
+
+        if (sendRequestBtn) {
+            sendRequestBtn.addEventListener('click', async () => {
+                if (!currentUser) {
+                    showTopAlert('Please log in to send a hire request.', 'warning');
+                    const loginModalEl = document.getElementById('exampleModal');
+                    if (loginModalEl && window.bootstrap) new bootstrap.Modal(loginModalEl).show();
+                    return;
+                }
+
+                if (!currentSelection.serviceId) {
+                    showTopAlert('Please select a service before sending request.', 'warning');
+                    return;
+                }
+
+                const customerName = currentUser.displayName || currentUser.email || 'Customer';
+                const customerId = currentUser.uid || null;
+                const nowIso = new Date().toISOString();
+
+                const requestData = {
+                    artisanId: currentSelection.artisanId,
+                    artisanName: currentSelection.artisanName,
+                    serviceId: currentSelection.serviceId,
+                    serviceName: currentSelection.serviceName,
+                    price: currentSelection.price || null,
+                    note: customerNote ? customerNote.value || null : null,
+                    requestedAt: nowIso,
+                    createdAt: Date.now(),
+                    customerId,
+                    customerName,
+                    status: 'pending',
+                    date: new Date().toLocaleDateString(),
+                    time: new Date().toLocaleTimeString(),
+                };
+
+                try {
+                    const requestsRef = ref(database, 'hireRequests');
+                    const newReqRef = push(requestsRef);
+                    await set(newReqRef, requestData);
+                    if (hireModal) hireModal.hide();
+
+                    const humanDate = new Date(requestData.requestedAt).toLocaleString();
+                    showTopAlert(`<strong>✅ Booking Confirmed!</strong><br/>${customerName}, you have successfully hired <strong>${currentSelection.artisanName}</strong> for <strong>${requestData.serviceName}</strong> on ${humanDate}. The artisan will review your request shortly.`, 'success', 8000);
+
+                    setTimeout(() => {
+                        window.location.href = 'browsWorker2.html';
+                    }, 2000);
+                } catch (err) {
+                    console.error(err);
+                    showTopAlert('Failed to send request. Please try again.', 'danger');
+                }
+            });
+        }
+    </script>
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+<script src="script.js"></script>
+
+</html>

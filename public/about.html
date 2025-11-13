@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link rel="stylesheet" href="styl.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow fixed-top">
+        <div class="container-fluid w-75 mx-auto">
+            <h1 class="text-primary-emphasis fw-bold">Artisans</h1>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <img src="/images/list-1294835_1280 (1).png" alt="" width="25px">
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active p-3" aria-current="page" href="index.html">Home</a>
+                    <a class="nav-link p-3" href="about.html">About Us</a>
+                    <a class="nav-link p-3" href="signintwo.html">Browse Workers</a>
+                    <a class="nav-link p-3" href="contact.html">Contact Us</a>
+                    <button class="m-2" type="button" id="login" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Log In</button>
+                    <button class="m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" type="button">Sign
+                        Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Go for the right post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="logInA()" class="m-2 fw-bold" id="hero" type="submit">Login as an
+                        Artisan</button>
+                    <button onclick="logInC()" class="m-2 fw-bold" type="submit">Login as a
+                        customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Go for the right
+                        post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="registerUser()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Artisan</button>
+                    <button onclick="registerCustomer()" class="m-2 fw-bold" type="submit">Register as a
+                        customer</button>
+                    <button onclick="registerAdmin()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Admin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="text-hero text-center">
+        <h1 class="aboutText">About Us</h1>
+    </section>
+
+    <section>
+        <div class="row g-4 justify-content-center align-items-center mx-auto text">
+            <div class=" col-12 col-md-6 col-lg-4 text">
+                <img class="rounded-5 mb-2" src="/images/about.jpg" width="100%" alt="">
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 text-start">
+                <h1 class="text-start fw-bolder m-0 text-topic">About Us</h1>
+                <div class="text-black-50 fs-5">
+                    <p>
+                        Artisan is a platform that connects customers with trusted and skilled local artisans —
+                        including
+                        tailors, plumbers, electricians, mechanics, carpenters, and more.
+                        Our goal is to make it easy for people to find reliable professionals for any kind of work,
+                        anytime
+                        and anywhere.
+                    </p>
+                    <p>We believe in promoting decent work and creating opportunities for artisans to showcase their
+                        skills,
+                        grow their businesses, and reach more customers.
+                    </p>
+                    <p>
+                        At Artisan, we bridge the gap between service providers and those who need their expertise —
+                        fast,
+                        easy, and reliable.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="container">
+                <div class="col-12 col-md-6 col-lg-6 mx-auto my-5 text">
+                    <h2 class="fw-bolder text-topic">Our Vision</h2>
+                    <p class="text-black-50 fs-5 text">To create a reliable and accessible platform where skilled
+                        artisans can easily connect with customers, grow their craft, and build lasting trust within
+                        communities.</p>
+                </div>
+            </div>
+            <div>
+                <div class="col-12 col-md-6 col-lg-6 mx-auto my-5 text">
+                    <h2 class="fw-bolder text-topic">Our Mission</h2>
+                    <p class="text-black-50 fs-5 text">To empower local artisans by giving them visibility, digital
+                        tools, and fair work opportunities while helping customers find quality and affordable services
+                        quickly and safely.</p>
+                </div>
+            </div>
+            <div>
+                <div class="col-12 col-md-6 col-lg-6 mx-auto my-5 text">
+                    <h2 class="fw-bolder text-topic">Our Core Values</h2>
+                    <ul class="text-start fs-5 text-black-50 " style="list-style-type: square;">
+                        <li>Trust: We value honesty and reliability in every service.</li>
+                        <li>Quality: We promote only skilled and verified artisans.</li>
+                        <li>Innovation: We use technology to simplify connections between artisans and customers.</li>
+                        <li>Community: We support local talent and encourage growth within our communities.</li>
+                        <li>Customer Satisfaction: We ensure every service brings comfort and confidence.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div class="col-12 col-md-6 col-lg-6 mx-auto my-5 text">
+                    <h2 class="fw-bolder text-topic">Our Team – “The Artisan Connect Crew”</h2>
+                    <p class="text-black-50 fs-5 text">To empower local artisans by giving them visibility, digital
+                        tools, and fair work opportunities while helping customers find quality and affordable services
+                        quickly and safely.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="row flex-column-reverse flex-lg-row justify-content-around align-items-center text-center">
+            <div class=" col-11 col-xlg-4 col-xxlg-4 col-lg-5 col-sm-11 col-md-11 text-center text-white b-2">
+                © 2025 Artisan | All Rights Reserved.
+            </div>
+            <div class=" col-11 col-xlg-4 col-xxlg-4 col-lg-5 col-sm-11 col-md-11 text-center">
+                <a href="about.html" class="text-white text-decoration-none mx-2">About</a>
+                <a href="FAQ.html" class="text-white text-decoration-none mx-2">FAQ</a>
+                <a href="contact.html" class="text-white text-decoration-none mx-2">Contact</a>
+                <a href="privacy.html" class="text-white text-decoration-none mx-2">Privacy</a>
+            </div>
+        </div>
+    </footer>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+<script src="script.js"></script>
+
+</html>

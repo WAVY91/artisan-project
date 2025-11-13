@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+
+    <script>
+        const showMessage = (message, type = 'error') => {
+            const box = document.getElementById('message-box');
+            box.textContent = message;
+            box.className = 'message-box visible ' + type;
+
+            setTimeout(() => {
+                box.classList.remove('visible');
+            }, 5000);
+        };
+        window.showMessage = showMessage;
+
+        const nextPage = () => {
+            const nextButton = document.getElementById('next-btn');
+
+            let firstName = document.getElementById('name').value.trim();
+            let lastName = document.getElementById('lName').value.trim();
+            let whatsappNumber = document.getElementById('number').value.trim();
+            let gender = document.getElementById('gender').value.trim();
+
+            nextButton.disabled = true;
+            nextButton.classList.add('disabled');
+
+            if (firstName === '' || lastName === '' || whatsappNumber === '' || gender === '') {
+                showMessage('Please fill in all required fields.', 'error');
+                nextButton.disabled = false;
+                nextButton.classList.remove('disabled');
+                return;
+            } else {
+                localStorage.setItem('firstName', firstName);
+                localStorage.setItem('lastName', lastName);
+                localStorage.setItem('whatsappNumber', whatsappNumber);
+                localStorage.setItem('gender', gender);
+
+                setTimeout(() => {
+                    window.location.href = "next.html";
+                }, 1500);
+            }
+        }
+        window.nextPage = nextPage;
+
+        window.logIn = () => {
+            showMessage("Redirecting to Log In page (Not implemented in this single file demo).", 'info');
+        };
+
+        window.onload = function () {
+            document.getElementById('next-btn').addEventListener('click', nextPage);
+        };
+    </script>
+
+    <style>
+        :root {
+            --primary-teal: #4f7174;
+            --custom-dark-blue: rgb(19, 19, 85);
+            --custom-dark-blue-hover: rgb(10, 10, 50);
+            --background-light: #f4f4f4;
+            --card-background: #ffffff;
+            --text-dark: #4a4a4a;
+            --text-secondary: #777777;
+            --border-radius-large: 30px;
+            --border-radius-small: 12px;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #app-wrapper {
+            width: min(420px, calc(100% - 40px));
+            max-width: 420px;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 30px;
+            margin: 50px auto 20px;
+            box-sizing: border-box;
+        }
+
+        .top-graphic {
+            height: 100px;
+            background-color: var(--custom-dark-blue);
+            border-radius: 0 0 50% 50% / 0 0 10% 10%;
+            margin-bottom: -50px;
+        }
+
+        .content {
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white;
+            -webkit-text-stroke: 1px rgb(0, 21, 252);
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pitch-line {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            padding: 0 1rem;
+        }
+
+        .subtitle-body {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+            padding-left: 0.5rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: 100%;
+            padding: 15px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius-small);
+            background-color: #f8f8f8;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary-teal);
+            outline: none;
+            box-shadow: 0 0 5px rgba(79, 113, 116, 0.2);
+        }
+
+        #next-btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: white;
+            background-color: var(--custom-dark-blue);
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(19, 19, 85, 0.4);
+            margin-top: 1rem;
+        }
+
+        #next-btn:hover:not(:disabled) {
+            background-color: var(--custom-dark-blue-hover);
+        }
+
+        #next-btn.disabled,
+        #next-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .login-link {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+        }
+
+        .login-link a {
+            color: var(--primary-teal);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .message-box {
+            display: none;
+            min-height: 30px;
+            transition: none;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid;
+            text-align: left;
+        }
+
+        .message-box.visible {
+            display: block;
+        }
+
+        .message-box.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .message-box.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .message-box.info {
+            background-color: #cce5ff;
+            color: #004085;
+            border-color: #b8daff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-wrapper">
+        <div class="top-graphic"></div>
+
+        <div class="content">
+            <h2>Join Artisan Connect</h2>
+            <p class="pitch-line">Turn your skill into steady income.</p>
+            <p class="subtitle-body">
+                Create your free profile today and start connecting with real customers who need your expertise.
+            </p>
+
+            <div id="message-box">
+            </div>
+
+            <form id="registration-form">
+                <div class="form-group">
+                    <label for="name">First Name</label>
+                    <input type="text" placeholder="Enter First Name" id="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lName">Last Name</label>
+                    <input type="text" placeholder="Enter Last Name" id="lName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="number">Whatsapp Phone</label>
+                    <input type="number" placeholder="Enter Whatsapp Number" id="number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select name="Gender" id="gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </form>
+
+            <button id="next-btn" type="button">
+                Next
+            </button>
+
+            <div class="login-link">
+                Already Registered? <a href="signin.html" onclick="logIn()">Log in Now</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

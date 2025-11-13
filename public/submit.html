@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Sign Up</title>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        const showMessage = (message, type = 'error') => {
+            const box = document.getElementById('message-box');
+            box.textContent = message;
+            box.className = 'message-box visible ' + type;
+
+            setTimeout(() => {
+                box.classList.remove('visible');
+            }, 5000);
+        };
+        window.showMessage = showMessage;
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDocTQeWER_kb6mxqNlmbv04M0339iaDDM",
+            authDomain: "project-8bb29.firebaseapp.com",
+            databaseURL: "https://project-8bb29-default-rtdb.firebaseio.com",
+            projectId: "project-8bb29",
+            storageBucket: "project-8bb29.firebasestorage.app",
+            messagingSenderId: "792700267479",
+            appId: "1:792700267479:web:d491f80fcd4c105faf3992",
+            measurementId: "G-KY94VPFHX5",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+
+        function encodeEmail(email) {
+            return btoa(email).replace(/[.#$/\[\]]/g, "_");
+        }
+
+        async function isEmailBanned(email) {
+            const bannedRef = ref(database, `bannedUsers/${encodeEmail(email)}`);
+            const snapshot = await get(bannedRef);
+            return snapshot.exists();
+        }
+
+        const signUser = async () => {
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const phoneNum = document.getElementById("phoneNum").value.trim();
+            const termsAccepted = document.getElementById("termsAccepted").checked;
+            const signupButton = document.getElementById("signup-btn");
+            const box = document.getElementById('message-box');
+
+            box.classList.remove('visible');
+            signupButton.disabled = true;
+            signupButton.classList.add('disabled');
+
+            if (!email || !password || !phoneNum) {
+                showMessage("Please fill all required inputs.", "error");
+                signupButton.disabled = false;
+                signupButton.classList.remove('disabled');
+                return;
+            }
+            if (!termsAccepted) {
+                showMessage("You must agree to the Terms and Conditions.", "error");
+                signupButton.disabled = false;
+                signupButton.classList.remove('disabled');
+                return;
+            }
+            if (password.length < 6) {
+                showMessage("Password must be at least 6 characters long.", "error");
+                signupButton.disabled = false;
+                signupButton.classList.remove('disabled');
+                return;
+            }
+
+
+            try {
+                const banned = await isEmailBanned(email);
+                if (banned) {
+                    showMessage("This email has been banned and cannot register again.", "error");
+                    signupButton.disabled = false;
+                    signupButton.classList.remove('disabled');
+                    return;
+                }
+
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                const allUsers = {
+                    email,
+                    password,
+                    phoneNum,
+                    termsAccepted,
+                    firstName: localStorage.getItem('firstName'),
+                    lastName: localStorage.getItem('lastName'),
+                    WhatsappNumber: localStorage.getItem('number'),
+                    gender: localStorage.getItem('gender'),
+                    dateOfBirth: localStorage.getItem('dob'),
+                    selectJob: localStorage.getItem('select'),
+                    street: localStorage.getItem('street'),
+                    country: localStorage.getItem('country'),
+                    state: localStorage.getItem('sor'),
+                    city: localStorage.getItem('city'),
+                    qualification: localStorage.getItem('qualification'),
+                    school: localStorage.getItem('school'),
+                    course: localStorage.getItem('course'),
+                    graduationYear: localStorage.getItem('year'),
+                    certificate: localStorage.getItem('certificate'),
+                    selectedValue: localStorage.getItem('workExperience'),
+                    role: localStorage.getItem('role'),
+                    company: localStorage.getItem('company'),
+                    startYear: localStorage.getItem('startYear'),
+                    endYear: localStorage.getItem('endYear'),
+                    jobDescription: localStorage.getItem('description'),
+                    jobCategory: localStorage.getItem('job'),
+                    yearsOfExperience: localStorage.getItem('yearsOf'),
+                    whatYouCanDo: localStorage.getItem('describe'),
+                    files: localStorage.getItem('fileCount'),
+                    emergencyNameOne: localStorage.getItem('emergencyName'),
+                    emergencyPhoneOne: localStorage.getItem('emergencyPhone'),
+                    emergencyEmailOne: localStorage.getItem('emergencyEmail'),
+                    emergencyAddressOne: localStorage.getItem('emergencyAddress'),
+                    emergencyNameTwo: localStorage.getItem('emergencyNameTwo'),
+                    emergencyPhoneTwo: localStorage.getItem('emergencyPhoneTwo'),
+                    emergencyEmailTwo: localStorage.getItem('emergencyEmailTwo'),
+                    emergencyAddressTwo: localStorage.getItem('emergencyAddressTwo'),
+                    services: {
+                        services1: localStorage.getItem('services1'),
+                        services2: localStorage.getItem('services2'),
+                        services3: localStorage.getItem('services3'),
+                        services4: localStorage.getItem('services4'),
+                    },
+                    date: new Date().toLocaleDateString(),
+                    time: new Date().toLocaleTimeString(),
+                };
+
+                await set(ref(database, "allArtisans/" + user.uid), allUsers);
+
+                showMessage("Account created successfully! Please verify your email.", "success");
+
+
+                setTimeout(() => {
+                    window.location.href = 'signin.html'
+                }, 1500);
+
+            } catch (error) {
+                console.error("Signup error:", error.message);
+                showMessage(error.message, "error");
+                signupButton.disabled = false;
+                signupButton.classList.remove('disabled');
+            }
+        };
+
+        const backAll = () => {
+            window.location.href = "nextseven.html";
+        };
+
+        const togglePasswordVisibility = (event) => {
+            if (event && event.preventDefault) {
+                event.preventDefault();
+            }
+
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('password-toggle-icon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-3.92 0-7-2.92-9-5.94m0-4.06c2-3.02 5.08-5.94 9-5.94 2.1 0 4.14.49 5.8 1.48M1 1l22 22M11 11a3 3 0 0 1 3 3"></path></svg>`;
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+            }
+            passwordInput.focus();
+        };
+
+
+        window.signUser = signUser;
+        window.backAll = backAll;
+        window.togglePasswordVisibility = togglePasswordVisibility;
+    </script>
+
+    <style>
+        :root {
+            --primary-teal: #4f7174;
+            --custom-dark-blue: rgb(19, 19, 85);
+            --custom-dark-blue-hover: rgb(10, 10, 50);
+            --background-light: #f4f4f4;
+            --card-background: #ffffff;
+            --text-dark: #555555;
+            --text-secondary: #777777;
+            --headline-brown: #7B4734;
+            --border-radius-large: 30px;
+            --border-radius-small: 12px;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #app-wrapper {
+            /* Keep a consistent gutter on small screens so the card doesn't touch the edges */
+            width: min(420px, calc(100% - 40px));
+            max-width: 420px;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 40px;
+            margin: 50px auto 20px;
+            /* center horizontally, keep top space */
+            box-sizing: border-box;
+            /* ensure padding doesn't cause overflow */
+        }
+
+        .top-graphic {
+            height: 100px;
+            background-color: var(--custom-dark-blue);
+            border-radius: 0 0 50% 50% / 0 0 10% 10%;
+            margin-bottom: -50px;
+        }
+
+        .content {
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .content h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            -webkit-text-stroke: 1px rgb(0, 21, 252);
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .content p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            padding: 0;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            padding-left: 0;
+            padding-right: 0;
+            text-align: left;
+        }
+
+        .content label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+            padding-left: 0;
+            text-align: left;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-container input[type="password"],
+        .password-container input[type="text"] {
+            width: 100%;
+            padding: 15px 12px;
+            padding-right: 45px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius-small);
+            background-color: #f8f8f8;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+            text-align: left;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-secondary);
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .content input[type="email"],
+        .content input[type="number"] {
+            width: 100%;
+            padding: 15px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius-small);
+            background-color: #f8f8f8;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+            text-align: left;
+        }
+
+        .content input:focus {
+            border-color: var(--primary-teal);
+            outline: none;
+            box-shadow: 0 0 5px rgba(79, 113, 116, 0.2);
+        }
+
+        .content input[type="checkbox"] {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            background-color: transparent;
+            border: 1px solid var(--text-dark);
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .button-group button {
+            flex-grow: 1;
+            width: unset;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        #back-btn {
+            background-color: var(--card-background);
+            color: var(--custom-dark-blue);
+            border: 2px solid var(--custom-dark-blue);
+        }
+
+        #back-btn:hover {
+            background-color: var(--custom-dark-blue);
+            color: white;
+        }
+
+        #signup-btn {
+            color: white;
+            background-color: var(--custom-dark-blue);
+            box-shadow: 0 4px 10px rgba(19, 19, 85, 0.4);
+        }
+
+        #signup-btn:hover:not(:disabled) {
+            background-color: var(--custom-dark-blue-hover);
+        }
+
+        #signup-btn.disabled,
+        #signup-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .login-link {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            text-align: center !important;
+        }
+
+        .login-link a {
+            color: var(--primary-teal);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .message-box {
+            display: none;
+            min-height: 30px;
+            transition: none;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid;
+            text-align: left;
+        }
+
+        .message-box.visible {
+            display: block;
+        }
+
+        .message-box.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .message-box.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .message-box.info {
+            background-color: #cce5ff;
+            color: #004085;
+            border-color: #b8daff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-wrapper">
+        <div class="top-graphic"></div>
+
+        <div class="content">
+            <h4>Finish Creating Your Account</h4>
+            <p>
+                You're just one step away from completing your registration. Enter your final account details below,
+                agree to the terms, and secure your profile.
+            </p>
+
+            <div id="message-box">
+            </div>
+
+            <form>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" placeholder="Enter Email Address" id="email" />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-container">
+                        <input type="password" placeholder="Enter Password" id="password" />
+                        <span class="password-toggle" id="password-toggle-icon"
+                            onclick="togglePasswordVisibility(event)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-eye">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNum">Phone Number</label>
+                    <input type="number" placeholder="Enter Phone Number" id="phoneNum" />
+                </div>
+
+                <div class="form-group" style="text-align: left;">
+                    <input id="termsAccepted" type="checkbox" />
+                    <label for="termsAccepted" style="display: inline; font-weight: 400; font-size: 0.95rem;">
+                        I agree to the <a href="#"
+                            onclick="showMessage('This would show your Terms and Conditions', 'info'); return false;"
+                            style="color: var(--primary-teal); text-decoration: none; font-weight: 600;">Terms and
+                            Conditions</a>.
+                    </label>
+                </div>
+            </form>
+
+            <div class="button-group">
+                <button onclick="backAll()" id="back-btn">
+                    Back
+                </button>
+                <button onclick="signUser()" id="signup-btn">
+                    Sign Up
+                </button>
+            </div>
+
+            <div class="login-link">
+                Already have an account? <a href="signin.html"
+                    style="color: var(--primary-teal); text-decoration: none; font-weight: 600;">Sign In</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

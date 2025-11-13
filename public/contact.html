@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="styl.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow fixed-top">
+        <div class="container-fluid w-75 mx-auto">
+            <h1 class="text-primary-emphasis fw-bold">Artisans</h1>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <img src="/images/list-1294835_1280 (1).png" alt="" width="25px">
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active p-3" aria-current="page" href="index.html">Home</a>
+                    <a class="nav-link p-3" href="about.html">About Us</a>
+                    <a class="nav-link p-3" href="signintwo.html">Browse Workers</a>
+                    <a class="nav-link p-3" href="contact.html">Contact Us</a>
+                    <button class="m-2" type="button" id="login" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Log In</button>
+                    <button class="m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" type="button">Sign
+                        Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Go for the right post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="logInA()" class="m-2 fw-bold" id="hero" type="submit">Login as an
+                        Artisan</button>
+                    <button onclick="logInC()" class="m-2 fw-bold" type="submit">Login as a
+                        customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Go for the right
+                        post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="registerUser()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Artisan</button>
+                    <button onclick="registerCustomer()" class="m-2 fw-bold" type="submit">Register as a
+                        customer</button>
+                    <button onclick="registerAdmin()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Admin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="text-hero text-center">
+        <h1 class="aboutText">Contact Us</h1>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="row g-1 gap-5 justify-content-center">
+                <div class="row col-11 col-md-10 col-lg-5">
+                    <h1 class="text-start fw-bolder  text-topic">Contact Information</h1>
+                    <div class="shadow rounded-3 P-2">
+                        <img src="/images/whatsapp.png" class="p-3" width="20%" alt="">
+                        <span>07039692720</span>
+                    </div>
+                    <div class="shadow rounded-3 P-2">
+                        <img src="/images/whatsapp.png" class="p-3" width="20%" alt="">
+                        <span>07039692720</span>
+                    </div>
+                    <div class="shadow rounded-3 P-2">
+                        <img src="/images/whatsapp.png" class="p-3" width="20%" alt="">
+                        <span>07039692720</span>
+                    </div>
+                    <div class="shadow rounded-3 P-2">
+                        <img src="/images/whatsapp.png" class="p-3" width="20%" alt="">
+                        <span>07039692720</span>
+                    </div>
+                </div>
+                <div class="row col-11 col-md-10 col-lg-7">
+                    <h1 class="text-start fw-bolder text-topic">Contact Information</h1>
+                    <div class="col-lg-6">
+                        <input class="form-control my-1 p-4" type="text" placeholder="Your Name" id="name" />
+                        <input class="form-control my-1 p-4" type="text" placeholder="Subject" id="subject" />
+                    </div>
+                    <div class="col-lg-6">
+                        <input class="form-control my-1 p-4" type="text" placeholder="Your Email" id="email" />
+                        <input class="form-control my-1 p-4" type="text" placeholder="Phone Number" id="number" />
+                    </div>
+                    <div class="col-lg-12">
+                        <textarea name="" id="comment" placeholder="Your comment" class="form-control"
+                            rows="4"></textarea>
+                    </div>
+                    <button class="m-2 col-6 col-lg-3" onclick="subMe()">submit message</button>
+                </div>
+            </div>
+    </section>
+
+    <footer class="footer">
+        <div class="row flex-column-reverse flex-lg-row justify-content-around align-items-center text-center">
+            <div class=" col-11 col-xlg-4 col-xxlg-4 col-lg-5 col-sm-11 col-md-11 text-center text-white b-2">
+                © 2025 Artisan | All Rights Reserved.
+            </div>
+            <div class=" col-11 col-xlg-4 col-xxlg-4 col-lg-5 col-sm-11 col-md-11 text-center">
+                <a href="about.html" class="text-white text-decoration-none mx-2">About</a>
+                <a href="faq.html" class="text-white text-decoration-none mx-2">FAQ</a>
+                <a href="contact.html" class="text-white text-decoration-none mx-2">Contact</a>
+                <a href="privacy.html" class="text-white text-decoration-none mx-2">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDocTQeWER_kb6mxqNlmbv04M0339iaDDM",
+            authDomain: "project-8bb29.firebaseapp.com",
+            databaseURL: "https://project-8bb29-default-rtdb.firebaseio.com",
+            projectId: "project-8bb29",
+            storageBucket: "project-8bb29.firebasestorage.app",
+            messagingSenderId: "792700267479",
+            appId: "1:792700267479:web:d491f80fcd4c105faf3992",
+            measurementId: "G-KY94VPFHX5",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const subMe = () => {
+            const name = document.getElementById("name").value.trim().toLowerCase();
+            const subject = document.getElementById("subject").value.trim().toLowerCase();
+            const email = document.getElementById("email").value.trim().toLowerCase();
+            const number = document.getElementById("number").value.trim();
+            const comment = document.getElementById("comment").value.trim().toLowerCase();
+
+            if (!name || !subject || !email || !number || !comment) {
+                alert("Please fill in all input fields");
+                return;
+            }
+
+            const contact = {
+                name,
+                subject,
+                email,
+                number,
+                comment,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
+            };
+
+            const contactRef = ref(database, "contactInfos");
+            push(contactRef, contact)
+                .then(() => {
+                    alert("Message sent successfully!");
+                    document.getElementById("name").value = "";
+                    document.getElementById("subject").value = "";
+                    document.getElementById("email").value = "";
+                    document.getElementById("number").value = "";
+                    document.getElementById("comment").value = "";
+                })
+                .catch((error) => {
+                    alert("Error sending message: " + error.message);
+                });
+        };
+
+        window.subMe = subMe;
+    </script>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+<script src="script.js"></script>
+
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Experience</title>
+
+    <script>
+        const showMessage = (message, type = 'error') => {
+            const box = document.getElementById('message-box');
+            box.textContent = message;
+            box.className = 'message-box visible ' + type;
+
+            setTimeout(() => {
+                box.classList.remove('visible');
+            }, 5000);
+        };
+        window.showMessage = showMessage;
+
+        const toggleInputError = (inputId, message) => {
+            const errorSpan = document.getElementById(`error-${inputId}`);
+            if (errorSpan) {
+                if (message) {
+                    errorSpan.textContent = message;
+                    errorSpan.style.visibility = 'visible';
+                } else {
+                    errorSpan.textContent = '';
+                    errorSpan.style.visibility = 'hidden';
+                }
+            }
+        }
+
+        function handleExperienceChange() {
+            const selectedValue = document.getElementById('exper').value;
+            const exact = document.getElementById('exact');
+
+            if (selectedValue === 'hasExperience') {
+                exact.style.display = 'block';
+                setTimeout(() => {
+                    exact.classList.add('visible');
+                }, 10);
+            } else {
+                exact.classList.remove('visible');
+                setTimeout(() => {
+                    exact.style.display = 'none';
+                }, 500);
+            }
+        }
+
+        const nextFour = () => {
+            const experElement = document.getElementById('exper');
+            const selectedValue = experElement.value.trim();
+
+            const nextButton = document.getElementById('next-btn');
+            const box = document.getElementById('message-box');
+
+            box.classList.remove('visible');
+            nextButton.disabled = true;
+            nextButton.classList.add('disabled');
+
+            if (selectedValue === '') {
+                showMessage('Please select your employment history before proceeding.', 'error');
+                nextButton.disabled = false;
+                nextButton.classList.remove('disabled');
+                return;
+            }
+
+            if (selectedValue === 'NoExperience') {
+                localStorage.setItem('workExperience', selectedValue.toLowerCase());
+
+                setTimeout(() => {
+                    window.location.href = 'nextfour.html';
+                }, 1500);
+                return;
+            }
+
+            if (selectedValue === 'hasExperience') {
+                const role = document.getElementById('role').value.trim();
+                const company = document.getElementById('company').value.trim();
+                const startYear = document.getElementById('startYear').value.trim();
+                const jobDescription = document.getElementById('description').value.trim();
+                const endYear = document.getElementById('endYear').value.trim();
+
+                if (role === '' || company === '' || startYear === '' || jobDescription === '') {
+                    showMessage('Please fill in all mandatory employment fields (Company, Role, Start Year, Description).', 'error');
+                    nextButton.disabled = false;
+                    nextButton.classList.remove('disabled');
+                    return;
+                }
+
+                localStorage.setItem('workExperience', selectedValue.toLowerCase());
+                localStorage.setItem('role', role.toLowerCase());
+                localStorage.setItem('company', company.toLowerCase());
+                localStorage.setItem('startYear', startYear.toLowerCase());
+                localStorage.setItem('endYear', endYear.toLowerCase());
+                localStorage.setItem('description', jobDescription.toLowerCase());
+
+
+                setTimeout(() => {
+                    window.location.href = "nextfour.html";
+                }, 1500);
+                return;
+            }
+            nextButton.disabled = false;
+            nextButton.classList.remove('disabled');
+        };
+
+        const backThree = () => {
+            setTimeout(() => {
+            }, 1500);
+        };
+
+        window.onload = function () {
+            document.getElementById('next-btn').addEventListener('click', nextFour);
+            document.getElementById('back-btn').addEventListener('click', backThree);
+            document.getElementById('exper').addEventListener('change', handleExperienceChange);
+
+            const exact = document.getElementById('exact');
+            exact.classList.remove('visible');
+            exact.style.display = 'none';
+        };
+    </script>
+
+    <style>
+        :root {
+            --primary-teal: #4f7174;
+            --custom-dark-blue: rgb(19, 19, 85);
+            --custom-dark-blue-hover: rgb(10, 10, 50);
+            --background-light: #f4f4f4;
+            --card-background: #ffffff;
+            --text-dark: #555555;
+            --text-secondary: #777777;
+            --headline-brown: #7B4734;
+            --border-radius-large: 30px;
+            --border-radius-small: 12px;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #app-wrapper {
+            width: min(420px, calc(100% - 40px));
+            max-width: 420px;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 40px;
+            margin: 50px auto 20px;
+            box-sizing: border-box;
+        }
+
+        .top-graphic {
+            height: 100px;
+            background-color: var(--custom-dark-blue);
+            border-radius: 0 0 50% 50% / 0 0 10% 10%;
+            margin-bottom: -50px;
+        }
+
+        .content {
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            -webkit-text-stroke: 1px rgb(0, 21, 252);
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content h5 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--headline-brown);
+            margin-bottom: 0.5rem;
+            padding: 0 1rem;
+        }
+
+        .content p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        #exact p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            padding: 0;
+        }
+
+        .content>div>div {
+            margin-bottom: 1.25rem;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        #exact>div {
+            margin-bottom: 1.25rem;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        #exact>div:last-of-type {
+            margin-bottom: 1.25rem;
+        }
+
+
+        .content label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+            padding-left: 0;
+            text-align: left;
+        }
+
+        .content input[type="text"],
+        .content input[type="number"],
+        .content select,
+        .content textarea {
+            width: 100%;
+            padding: 15px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius-small);
+            background-color: #f8f8f8;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+            resize: vertical;
+            text-align: left;
+        }
+
+        .content input:focus,
+        .content select:focus,
+        .content textarea:focus {
+            border-color: var(--primary-teal);
+            outline: none;
+            box-shadow: 0 0 5px rgba(79, 113, 116, 0.2);
+        }
+
+        #exact.visible {
+            display: block !important;
+            opacity: 1;
+        }
+
+        #exact {
+            opacity: 0;
+            display: none;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .content>div:nth-last-child(2) {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+
+        .content button {
+            flex-grow: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        #back-btn {
+            background-color: var(--card-background);
+            color: var(--custom-dark-blue);
+            border: 2px solid var(--custom-dark-blue);
+        }
+
+        #back-btn:hover {
+            background-color: var(--custom-dark-blue);
+            color: white;
+        }
+
+        #next-btn {
+            color: white;
+            background-color: var(--custom-dark-blue);
+            box-shadow: 0 4px 10px rgba(19, 19, 85, 0.4);
+        }
+
+        #next-btn:hover:not(:disabled) {
+            background-color: var(--custom-dark-blue-hover);
+        }
+
+        #next-btn.disabled,
+        #next-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .login-link {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+        }
+
+        .login-link a {
+            color: var(--primary-teal);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .message-box {
+            display: none;
+            min-height: 30px;
+            transition: none;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid;
+            text-align: left;
+        }
+
+        .message-box.visible {
+            display: block;
+        }
+
+        .message-box.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .message-box.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .message-box.info {
+            background-color: #cce5ff;
+            color: #004085;
+            border-color: #b8daff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-wrapper">
+        <div class="top-graphic"></div>
+
+        <div class="content">
+            <h3>Work Experience</h3>
+            <h5>Share Your Employment History</h5>
+            <p>
+                Let customers know your background. If you have experience, please provide details below.
+            </p>
+
+            <div id="message-box">
+            </div>
+            <div>
+                <label for="exper">Select Employment History</label>
+                <select name="Select Work Experience" id="exper" onchange="handleExperienceChange()">
+                    <option value="" disabled selected>Select Employment History</option>
+                    <option value="NoExperience">No Work Experience</option>
+                    <option value="hasExperience">Work Experience</option>
+                </select>
+            </div>
+
+            <div id="exact">
+                <p>Employment Details</p>
+
+                <div>
+                    <label for="company">Company Name</label>
+                    <input type="text" placeholder="Enter company name" id="company">
+                </div>
+
+                <div>
+                    <label for="role">Role</label>
+                    <input type="text" placeholder="Enter your role/title" id="role">
+                </div>
+
+                <div>
+                    <label for="startYear">Start Year</label>
+                    <input type="number" placeholder="e.g., 2018" id="startYear">
+                </div>
+
+                <div>
+                    <label for="endYear">End Year / Current</label>
+                    <input type="number" placeholder="e.g., 2023 or leave blank if current" id="endYear">
+                </div>
+
+                <div>
+                    <label for="description">Job Description / Responsibilities</label>
+                    <textarea placeholder="Describe your key tasks and achievements..." id="description"
+                        rows="3"></textarea>
+                </div>
+            </div>
+
+            <div>
+                <button onclick="backThree()" id="back-btn">
+                    Back
+                </button>
+                <button onclick="nextFour()" id="next-btn">
+                    Next
+                </button>
+            </div>
+
+            <div class="login-link">
+                Already Registered? <a href="signin.html" onclick="logIn()">Log in Now</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

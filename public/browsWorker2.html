@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Browse Workers</title>
+    <link rel="stylesheet" href="styl.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow fixed-top">
+        <div class="container-fluid w-75 mx-auto">
+            <h1 class="text-primary-emphasis fw-bold">Artisans</h1>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <img src="/images/list-1294835_1280 (1).png" alt="" width="25px">
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active p-3" aria-current="page" href="index.html">Home</a>
+                    <a class="nav-link p-3" href="about.html">About Us</a>
+                    <a class="nav-link p-3" href="browsWorker2.html">Browse Workers</a>
+                    <a class="nav-link p-3" href="contact.html">Contact Us</a>
+                    <button class="m-2" type="button" id="login" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Log In</button>
+                    <button class="m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" type="button">Sign
+                        Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Go for the right post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="logInA()" class="m-2 fw-bold" id="hero" type="submit">Login as an
+                        Artisan</button>
+                    <button onclick="logInC()" class="m-2 fw-bold" type="submit">Login as a
+                        customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Go for the right
+                        post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="registerUser()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Artisan</button>
+                    <button onclick="registerCustomer()" class="m-2 fw-bold" type="submit">Register as a
+                        customer</button>
+                    <button onclick="registerAdmin()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Admin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <h2 class="mb-3">Browse Workers</h2>
+        <div id="artisanGrid" class="row g-3"></div>
+    </div>
+
+    <div class="modal fade" id="hireModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="hireModalTitle" class="modal-title">Hire</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="artisanShortInfo"></p>
+                    <div id="servicesList" class="list-group"></div>
+                    <hr />
+                    <div class="mb-2">
+                        <label for="customerNote" class="form-label small">Note (optional)</label>
+                        <input id="customerNote" class="form-control form-control-sm"
+                            placeholder="Any details for the artisan (date, location...)">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="sendRequestBtn" type="button" class="m-2">Send Request</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDocTQeWER_kb6mxqNlmbv04M0339iaDDM",
+            authDomain: "project-8bb29.firebaseapp.com",
+            databaseURL: "https://project-8bb29-default-rtdb.firebaseio.com",
+            projectId: "project-8bb29",
+            storageBucket: "project-8bb29.firebasestorage.app",
+            messagingSenderId: "792700267479",
+            appId: "1:792700267479:web:d491f80fcd4c105faf3992",
+            measurementId: "G-KY94VPFHX5",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        let currentUser = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+            } else {
+                window.location.href = 'signin.html';
+            }
+        });
+
+        const artisanGrid = document.getElementById('artisanGrid');
+        const servicesList = document.getElementById('servicesList');
+        const hireModalTitle = document.getElementById('hireModalTitle');
+        const artisanShortInfo = document.getElementById('artisanShortInfo');
+        const sendRequestBtn = document.getElementById('sendRequestBtn');
+        const customerNote = document.getElementById('customerNote');
+
+        let currentSelection = { artisanId: null, serviceId: null, serviceName: null, price: null, artisanName: null };
+
+        const artisansRef = ref(database, 'allArtisans');
+
+        function createCard(artisanId, artisan) {
+            const col = document.createElement('div');
+            col.className = 'col-12 col-sm-10 col-md-6 col-lg-6';
+
+            col.innerHTML = `
+                    <div class="card  mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="/images/passport.jpg" class="img-fluid rounded-circle" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body my-auto position-relative ">
+                                    <h5 class="card-title" id="work">${artisan.jobCategory || ''}</h5>
+                                    <p class="position-absolute top-0 end-0 shadow p-2 mt-2 me-2 text-white fw-bold">Top
+                                        Rated</p>
+                                    <p id="name">${artisan.firstName || artisan.name || 'Unnamed'}</p>
+                                    <p id="location"> <i class="bi bi-geo-alt"  ></i> ${artisan.city || ''},${artisan.state || ''}  State</p>
+                                    <button class="m-2 hire-btn" id="hireBtn" disabled title="Hiring disabled">
+                                        Hire Me
+                                        <i class="bi bi-arrow-right ms-2" aria-hidden="true"></i>
+                                    </button>
+                                    <a href="profile2.html?id=${encodeURIComponent(artisanId)}" class="m-2 text-decoration-none">View
+                                        Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+    `;
+
+            return col;
+        }
+
+        onValue(artisansRef, snapshot => {
+            artisanGrid.innerHTML = '';
+            const data = snapshot.val();
+            if (!data) {
+                artisanGrid.innerHTML = '<div class="col-12"><div class="alert alert-info">No artisans yet.</div></div>';
+                return;
+            }
+            Object.keys(data).forEach(id => {
+                artisanGrid.appendChild(createCard(id, data[id]));
+            });
+        });
+
+        const hireModalEl = document.getElementById('hireModal');
+        const hireModal = new bootstrap.Modal(hireModalEl);
+
+        function openHireModal(artisanId, artisan) {
+            currentSelection = { artisanId, serviceId: null, serviceName: null, price: null, artisanName: artisan.firstName || artisan.name || '' };
+            hireModalTitle.textContent = `Hire ${artisan.firstName || 'Artisan'}`;
+            artisanShortInfo.textContent = artisan.city ? `${artisan.jobCategory || ''} for ${artisan.city} ,${artisan.state || ''}  State` : artisan.skill || '';
+            servicesList.innerHTML = '';
+
+            const services = artisan.services || {};
+            const keys = Object.keys(services);
+
+            if (keys.length === 0) {
+                servicesList.innerHTML = '<div class="text-muted small">No services listed by this artisan.</div>';
+            } else {
+                keys.forEach(k => {
+                    const serviceText = services[k];
+                    const item = document.createElement('button');
+                    item.type = 'button';
+                    item.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+                    item.innerHTML = `<div class="text-start fw-semibold">${serviceText}</div>`;
+
+                    item.addEventListener('click', () => {
+                        document.querySelectorAll('#servicesList .active').forEach(n => n.classList.remove('active'));
+                        item.classList.add('active');
+
+                        currentSelection.serviceId = k;
+                        currentSelection.serviceName = serviceText;
+                        const priceMatch = String(serviceText).match(/(\d[\d,\. ]+)/);
+                        if (priceMatch) {
+                            currentSelection.price = priceMatch[0].replace(/[ ,]/g, '');
+                        } else {
+                            currentSelection.price = '';
+                        }
+                    });
+
+                    servicesList.appendChild(item);
+                });
+            }
+
+
+            customerNote.value = '';
+            hireModal.show();
+        }
+
+        sendRequestBtn.addEventListener('click', async () => {
+            showTopAlert('Hiring is currently disabled. No data will be saved.', 'info', 4000);
+            if (hireModal) hireModal.hide();
+        });
+
+        function showTopAlert(message, type = 'success', timeout = 4500) {
+            const existing = document.querySelectorAll('.top-alert-fixed');
+            existing.forEach(e => e.remove());
+
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} top-alert-fixed position-fixed bottom-0 start-50 translate-middle-x mb-3`;
+            alert.style.zIndex = 1060;
+            alert.setAttribute('role', 'alert');
+            alert.innerHTML = message;
+
+            document.body.appendChild(alert);
+
+            if (timeout > 0) {
+                setTimeout(() => {
+                    alert.classList.add('fade');
+                    alert.addEventListener('transitionend', () => alert.remove(), { once: true });
+                    setTimeout(() => alert.remove(), 600);
+                }, timeout);
+            }
+        }
+    </script>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+<script src="script.js"></script>
+
+</html>

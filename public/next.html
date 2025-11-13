@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Data</title>
+
+    <script>
+        const showMessage = (message, type = 'error') => {
+            const box = document.getElementById('message-box');
+            box.textContent = message;
+            box.className = 'message-box visible ' + type;
+
+            setTimeout(() => {
+                box.classList.remove('visible');
+            }, 5000);
+        };
+        window.showMessage = showMessage;
+
+        const toggleInputError = (inputId, message) => {
+            const errorSpan = document.getElementById(`error-${inputId}`);
+            if (errorSpan) {
+                if (message) {
+                    errorSpan.textContent = message;
+                    errorSpan.style.visibility = 'visible';
+                } else {
+                    errorSpan.textContent = '';
+                    errorSpan.style.visibility = 'hidden';
+                }
+            }
+        }
+
+        const savePersonalData = () => {
+            const nextButton = document.getElementById('next-btn');
+            const box = document.getElementById('message-box');
+
+            box.classList.remove('visible');
+
+            let isValid = true;
+            let emptyCount = 0;
+
+            nextButton.disabled = true;
+            nextButton.classList.add('disabled');
+
+            const fields = [
+                { id: 'dob', value: document.getElementById('dob').value.trim(), name: 'Date of Birth' },
+                { id: 'select', value: document.getElementById('select').value.trim(), name: 'Job Type' },
+                { id: 'street', value: document.getElementById('street').value.trim(), name: 'Street Address' },
+                { id: 'country', value: document.getElementById('country').value.trim(), name: 'Country' },
+                { id: 'sor', value: document.getElementById('sor').value.trim(), name: 'State of Residence' },
+                { id: 'city', value: document.getElementById('city').value.trim(), name: 'City' },
+            ];
+
+            fields.forEach(field => {
+                toggleInputError(field.id, '');
+                if (field.value === '') {
+                    emptyCount++;
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                showMessage('Please fill in all required fields to continue.', 'error');
+
+                nextButton.disabled = false;
+                nextButton.classList.remove('disabled');
+                return;
+            }
+
+            localStorage.setItem('dob', fields.find(f => f.id === 'dob').value);
+            localStorage.setItem('select', fields.find(f => f.id === 'select').value);
+            localStorage.setItem('street', fields.find(f => f.id === 'street').value);
+            localStorage.setItem('country', fields.find(f => f.id === 'country').value);
+            localStorage.setItem('sor', fields.find(f => f.id === 'sor').value);
+            localStorage.setItem('city', fields.find(f => f.id === 'city').value);
+
+            setTimeout(() => {
+                window.location.href = "nexttwo.html";
+            }, 1500);
+        }
+
+        const backUser = () => {
+            setTimeout(() => {
+                window.location.href = "user.html";
+            }, 1500);
+        }
+
+        window.savePersonalData = savePersonalData;
+        window.backUser = backUser;
+
+        window.logIn = () => {
+            showMessage("Redirecting to Log In page (Not implemented in this single file demo).", 'info');
+        };
+
+        window.onload = function () {
+            document.getElementById('next-btn').addEventListener('click', savePersonalData);
+            document.getElementById('back-btn').addEventListener('click', backUser);
+        };
+    </script>
+
+    <style>
+        :root {
+            --primary-teal: #4f7174;
+            --primary-teal-dark: #395356;
+            --custom-dark-blue: rgb(19, 19, 85);
+            --custom-dark-blue-hover: rgb(10, 10, 50);
+            --background-light: #f4f4f4;
+            --card-background: #ffffff;
+            --text-dark: #4a4a4a;
+            --text-secondary: #777777;
+            --border-radius-large: 30px;
+            --border-radius-small: 12px;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #app-wrapper {
+            width: min(420px, calc(100% - 40px));
+            max-width: 420px;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 30px;
+            margin: 50px auto 20px;
+            box-sizing: border-box;
+        }
+
+        .top-graphic {
+            height: 100px;
+            background-color: var(--custom-dark-blue);
+            border-radius: 0 0 50% 50% / 0 0 10% 10%;
+            margin-bottom: -50px;
+        }
+
+        .content {
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pitch-line {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            padding: 0 1rem;
+        }
+
+        .subtitle-body {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+            padding-left: 0.5rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="date"],
+        .form-group select {
+            width: 100%;
+            padding: 15px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius-small);
+            background-color: #f8f8f8;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary-teal);
+            outline: none;
+            box-shadow: 0 0 5px rgba(79, 113, 116, 0.2);
+        }
+
+        .input-error {
+            display: none;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 1.5rem;
+        }
+
+        .button-group button {
+            flex-grow: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        #back-btn {
+            background-color: var(--background-light);
+            color: var(--custom-dark-blue);
+            border: 2px solid var(--custom-dark-blue);
+        }
+
+        #back-btn:hover {
+            background-color: var(--custom-dark-blue);
+            color: white;
+        }
+
+        #next-btn {
+            color: white;
+            background-color: var(--custom-dark-blue);
+            box-shadow: 0 4px 10px rgba(19, 19, 85, 0.4);
+        }
+
+        #next-btn:hover:not(:disabled) {
+            background-color: var(--custom-dark-blue-hover);
+        }
+
+        #next-btn.disabled,
+        #next-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .login-link {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+        }
+
+        .login-link a {
+            color: var(--primary-teal);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .message-box {
+            display: none;
+            min-height: 30px;
+            transition: none;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid;
+            text-align: left;
+        }
+
+        .message-box.visible {
+            display: block;
+        }
+
+        .message-box.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .message-box.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .message-box.info {
+            background-color: #cce5ff;
+            color: #004085;
+            border-color: #b8daff;
+        }
+
+        .color {
+            color: white;
+            font-weight: bolder;
+            font-size: 40px;
+            -webkit-text-stroke: 1px rgb(0, 21, 252);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-wrapper">
+        <div class="top-graphic"></div>
+
+        <div class="content">
+            <h2 class="color" style="font-size: 1.5rem; margin-top: 2rem;">Personal Data</h2>
+            <p class="subtitle-body" style="margin-top: 0;">
+                Please provide your residential and employment details to complete your profile verification. All fields
+                are required.
+            </p>
+
+            <div id="message-box">
+            </div>
+
+            <form id="personal-data-form">
+
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="select">Select Job Type</label>
+                    <select name="Select Job type" id="select" required>
+                        <option value="" disabled selected>Select Job type</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Full Time">Full Time</option>
+                        <option value="Part Time">Part Time</option>
+                        <option value="Self Employed">Self Employed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="street">Street Address</label>
+                    <input type="text" placeholder="Enter Street Address" id="street" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select name="Country" id="country" required>
+                        <option value="" disabled selected>Select Country</option>
+                        <option value="Algeria">Algeria</option>
+                        <option value="Angola">Angola</option>
+                        <option value="Benin">Benin</option>
+                        <option value="Botswana">Botswana</option>
+                        <option value="Burkina Faso">Burkina Faso</option>
+                        <option value="Burundi">Burundi</option>
+                        <option value="Cameroon">Cameroon</option>
+                        <option value="Cape Verde">Cape Verde</option>
+                        <option value="Cote D'Ivoire (Ivory Coast)">Cote D'Ivoire (Ivory Coast)</option>
+                        <option value="Egypt">Egypt</option>
+                        <option value="Ethopia">Ethopia</option>
+                        <option value="French Southern Territories">French Southern Territories</option>
+                        <option value="Gabon">Gabon</option>
+                        <option value="Ghana">Ghana</option>
+                        <option value="Kenya">Kenya</option>
+                        <option value="Liberia">Liberia</option>
+                        <option value="Mali">Mali</option>
+                        <option value="Maritius">Maritius</option>
+                        <option value="Namibia">Namibia</option>
+                        <option value="Niger">Niger</option>
+                        <option value="Nigeria">Nigeria</option>
+                        <option value="Rwanda">Rwanda</option>
+                        <option value="Somalia">Somalia</option>
+                        <option value="South Africa">South Africa</option>
+                        <option value="Tanzania">Tanzania</option>
+                        <option value="Togo">Togo</option>
+                        <option value="Uganda">Uganda</option>
+                        <option value="Western sahara">Western sahara</option>
+                        <option value="Zambia">Zambia</option>
+                        <option value="Zimbabwe">Zimbabwe</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sor">State of Residence</label>
+                    <select name="State of Residence" id="sor" required>
+                        <option value="" disabled selected>Select State</option>
+                        <option value="Lagos">Lagos</option>
+                        <option value="Oyo">Oyo</option>
+                        <option value="Osun">Osun</option>
+                        <option value="Abia">Abia</option>
+                        <option value="Ogun">Ogun</option>
+                        <option value="Akwa Ibom">Akwa Ibom</option>
+                        <option value="Anambra">Anambra</option>
+                        <option value="Bauchi">Bauchi</option>
+                        <option value="Bayelsa">Bayelsa</option>
+                        <option value="Benue">Benue</option>
+                        <option value="Borno">Borno</option>
+                        <option value="Cross River">Cross River</option>
+                        <option value="Delta">Delta</option>
+                        <option value="Ebonyi">Ebonyi</option>
+                        <option value="Edo">Edo</option>
+                        <option value="Ekiti">Ekiti</option>
+                        <option value="Enugu">Enugu</option>
+                        <option value="Gombe">Gombe</option>
+                        <option value="Imo">Imo</option>
+                        <option value="Jigawa">Jigawa</option>
+                        <option value="Kaduna">Kaduna</option>
+                        <option value="Kano">Kano</option>
+                        <option value="Katsina">Katsina</option>
+                        <option value="Kebbi">Kebbi</option>
+                        <option value="Kogi">Kogi</option>
+                        <option value="Kwara">Kwara</option>
+                        <option value="Nasarawa">Nasarawa</option>
+                        <option value="Niger">Niger</option>
+                        <option value="Ondo">Ondo</option>
+                        <option value="Plateau">Plateau</option>
+                        <option value="Rivers">Rivers</option>
+                        <option value="Sokoto">Sokoto</option>
+                        <option value="Taraba">Taraba</option>
+                        <option value="Yobe">Yobe</option>
+                        <option value="Zamfara">Zamfara</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" placeholder="Eg. Oshodi, Aroje, Taki" id="city" required>
+                </div>
+
+            </form>
+
+            <div class="button-group">
+                <button id="back-btn" type="button">
+                    Back
+                </button>
+                <button id="next-btn" type="button">
+                    Next
+                </button>
+            </div>
+
+            <div class="login-link">
+                Already Registered? <a href="signin.html" onclick="logIn()">Log in Now</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

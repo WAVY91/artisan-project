@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Pricing</title>
+
+    <script>
+        const showMessage = (message, type = 'error') => {
+            const box = document.getElementById('message-box');
+            box.textContent = message;
+            box.className = 'message-box visible ' + type;
+
+            setTimeout(() => {
+                box.classList.remove('visible');
+            }, 5000);
+        };
+        window.showMessage = showMessage;
+
+        const logIn = () => {
+            showMessage("Redirecting to Log In page.", 'info');
+        };
+        window.logIn = logIn;
+
+        const nextLow = () => {
+            const nextButton = document.getElementById('next-btn');
+            const box = document.getElementById('message-box');
+
+            nextButton.disabled = true;
+            nextButton.classList.add('disabled');
+
+            box.classList.remove('visible');
+
+            const work1 = document.getElementById('work1').value.trim();
+            const work2 = document.getElementById('work2').value.trim();
+            const work3 = document.getElementById('work3').value.trim();
+            const work4 = document.getElementById('work4').value.trim();
+
+            const price1 = document.getElementById('price1').value.trim();
+            const price2 = document.getElementById('price2').value.trim();
+            const price3 = document.getElementById('price3').value.trim();
+            const price4 = document.getElementById('price4').value.trim();
+
+            let isAnyFilled = work1 !== '' && price1 !== '' ||
+                work2 !== '' && price2 !== '' ||
+                work3 !== '' && price3 !== '' ||
+                work4 !== '' && price4 !== '';
+
+            if (!isAnyFilled) {
+                showMessage('Please enter details for at least one service and its price to proceed.', 'error');
+                nextButton.disabled = false;
+                nextButton.classList.remove('disabled');
+                return;
+            }
+
+            const services1 = `${work1} - ${price1}`
+            const services2 = `${work2} - ${price2}`
+            const services3 = `${work3} - ${price3}`
+            const services4 = `${work4} - ${price4}`
+
+            localStorage.setItem('services1', services1);
+            localStorage.setItem('services2', services2);
+            localStorage.setItem('services3', services3);
+            localStorage.setItem('services4', services4);
+
+            setTimeout(() => {
+                window.location.href = 'nextfive.html'
+            }, 1500)
+        }
+
+        const backLow = () => {
+            setTimeout(() => {
+                window.location.href = 'nextfour.html'
+            }, 1500)
+        }
+
+        window.onload = function () {
+            document.getElementById('next-btn').addEventListener('click', nextLow);
+            document.getElementById('back-btn').addEventListener('click', backLow);
+        };
+        window.nextLow = nextLow;
+        window.backLow = backLow;
+    </script>
+
+    <style>
+        :root {
+            --primary-teal: #4f7174;
+            --custom-dark-blue: rgb(19, 19, 85);
+            --custom-dark-blue-hover: rgb(10, 10, 50);
+            --background-light: #f4f4f4;
+            --card-background: #ffffff;
+            --text-dark: #555555;
+            --text-secondary: #777777;
+            --headline-brown: #7B4734;
+            --border-radius-large: 30px;
+            --border-radius-small: 12px;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #app-wrapper {
+            width: min(420px, calc(100% - 40px));
+            max-width: 420px;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 40px;
+            margin: 50px auto 20px;
+            box-sizing: border-box;
+        }
+
+        .top-graphic {
+            height: 100px;
+            background-color: var(--custom-dark-blue);
+            border-radius: 0 0 50% 50% / 0 0 10% 10%;
+            margin-bottom: -50px;
+        }
+
+        .content {
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            color: white;
+            -webkit-text-stroke: 1px rgb(0, 21, 252);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .content p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            padding: 0;
+            text-align: center;
+        }
+
+        .content>div:not(.service-pair, .button-group, .login-link) {
+            margin-bottom: 1.25rem;
+            padding-left: 0;
+            padding-right: 0;
+            text-align: left;
+        }
+
+        .content label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+            padding-left: 0;
+            text-align: left;
+        }
+
+        .content input[type="text"],
+        .content select,
+        .content textarea {
+            width: 100%;
+            padding: 15px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius-small);
+            background-color: #f8f8f8;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+            resize: vertical;
+            text-align: left;
+        }
+
+        .content input:focus,
+        .content select:focus,
+        .content textarea:focus {
+            border-color: var(--primary-teal);
+            outline: none;
+            box-shadow: 0 0 5px rgba(79, 113, 116, 0.2);
+        }
+
+        .service-pair {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            padding: 0;
+            text-align: left;
+        }
+
+        .work-input-group,
+        .price-input-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .service-pair input[type="text"] {
+            width: 100%;
+            padding: 15px 12px;
+        }
+
+        .service-pair label {
+            padding-left: 0;
+        }
+
+        .separator {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--text-dark);
+            margin: 0 5px;
+            line-height: 48px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .button-group button {
+            flex-grow: 1;
+            width: unset;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--border-radius-small);
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        #back-btn {
+            background-color: var(--card-background);
+            color: var(--custom-dark-blue);
+            border: 2px solid var(--custom-dark-blue);
+        }
+
+        #back-btn:hover {
+            background-color: var(--custom-dark-blue);
+            color: white;
+        }
+
+        #next-btn {
+            color: white;
+            background-color: var(--custom-dark-blue);
+            box-shadow: 0 4px 10px rgba(19, 19, 85, 0.4);
+        }
+
+        #next-btn:hover:not(:disabled) {
+            background-color: var(--custom-dark-blue-hover);
+        }
+
+        #next-btn.disabled,
+        #next-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .login-link {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            text-align: center !important;
+        }
+
+        .login-link a {
+            color: var(--primary-teal);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .message-box {
+            display: none;
+            min-height: 30px;
+            transition: none;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid;
+            text-align: left;
+        }
+
+        .message-box.visible {
+            display: block;
+        }
+
+        .message-box.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .message-box.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .message-box.info {
+            background-color: #cce5ff;
+            color: #004085;
+            border-color: #b8daff;
+        }
+
+        .color {
+            color: white;
+            font-weight: bolder;
+            font-size: 40px;
+            -webkit-text-stroke: 1px rgb(0, 21, 252);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-wrapper">
+        <div class="top-graphic"></div>
+
+        <div class="content">
+            <h3 class="color">Service Pricing</h3>
+            <p>
+                By filling out your profile, potential customers can easily understand what you do and choose the right
+                artisan for their needs. Be clear and honest about your skills and pricing to attract more clients and
+                build trust. let people know what makes your work special. Whether it’s plumbing, painting, tailoring,
+                or any other craft, this is your chance to stand out and attract the right clients
+            </p>
+            <p>
+                Take a moment to fill in your details carefully—customers are looking for skilled artisans they can
+                trust. The more precise and professional your profile, the more likely you are to get noticed and hired.
+            </p>
+
+            <div id="message-box">
+            </div>
+
+            <div class="service-pair">
+                <div class="work-input-group">
+                    <label for="work1">Enter Work</label>
+                    <input type="text" placeholder="Enter work" id="work1">
+                </div>
+                <span class="separator">:</span>
+                <div class="price-input-group">
+                    <label for="price1">Enter Price</label>
+                    <input type="text" id="price1" placeholder="Enter price">
+                </div>
+            </div>
+
+            <div class="service-pair">
+                <div class="work-input-group">
+                    <label for="work2">Enter Work</label>
+                    <input type="text" placeholder="Enter work" id="work2">
+                </div>
+                <span class="separator">:</span>
+                <div class="price-input-group">
+                    <label for="price2">Enter Price</label>
+                    <input type="text" id="price2" placeholder="Enter price">
+                </div>
+            </div>
+
+            <div class="service-pair">
+                <div class="work-input-group">
+                    <label for="work3">Enter Work</label>
+                    <input type="text" placeholder="Enter work" id="work3">
+                </div>
+                <span class="separator">:</span>
+                <div class="price-input-group">
+                    <label for="price3">Enter Price</label>
+                    <input type="text" id="price3" placeholder="Enter price">
+                </div>
+            </div>
+
+            <div class="service-pair">
+                <div class="work-input-group">
+                    <label for="work4">Enter Work</label>
+                    <input type="text" placeholder="Enter work" id="work4">
+                </div>
+                <span class="separator">:</span>
+                <div class="price-input-group">
+                    <label for="price4">Enter Price</label>
+                    <input type="text" id="price4" placeholder="Enter price">
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button onclick="backLow()" id="back-btn">
+                    Back
+                </button>
+                <button onclick="nextLow()" id="next-btn">
+                    Next
+                </button>
+            </div>
+
+            <div class="login-link">
+                Already Registered? <a href="signin.html" onclick="logIn()">Log in Now</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

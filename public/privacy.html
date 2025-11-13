@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy</title>
+    <link rel="stylesheet" href="styl.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow fixed-top">
+        <div class="container-fluid w-75 mx-auto">
+            <h1 class="text-primary-emphasis fw-bold">Artisans</h1>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <img src="/images/list-1294835_1280 (1).png" alt="" width="25px">
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active p-3" aria-current="page" href="index.html">Home</a>
+                    <a class="nav-link p-3" href="about.html">About Us</a>
+                    <a class="nav-link p-3" href="signintwo.html">Browse Workers</a>
+                    <a class="nav-link p-3" href="contact.html">Contact Us</a>
+                    <button class="m-2" type="button" id="login" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Log In</button>
+                    <button class="m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" type="button">Sign
+                        Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Go for the right post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="logInA()" class="m-2 fw-bold" id="hero" type="submit">Login as an
+                        Artisan</button>
+                    <button onclick="logInC()" class="m-2 fw-bold" type="submit">Login as a
+                        customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Go for the right
+                        post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <button onclick="registerUser()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Artisan</button>
+                    <button onclick="registerCustomer()" class="m-2 fw-bold" type="submit">Register as a
+                        customer</button>
+                    <button onclick="registerAdmin()" class="m-2 fw-bold" id="hero" type="submit">Register as an
+                        Admin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="text-hero text-center">
+        <h1 class="aboutText">Privacy</h1>
+    </section>
+
+    <section>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h1 class="text-start fw-bolder text-topic">Privacy Policy</h1>
+            <p>Effective Date: 1/6/2024</p>
+            <p>Last Updated: 20/7/2025</p>
+            <p class="lh-lg">Welcome to Artisan Connect (“we,” “our,” or “us”).</p>
+            <p class="lh-lg">We respect your privacy and are committed to protecting your personal information. This
+                Privacy
+                Policy explains how we collect, use, and safeguard your data when you use our website, mobile app,
+                and related services (collectively, the “Platform”).
+            </p>
+            <p class="lh-lg">By using our Platform, you agree to the terms of this Privacy Policy.</p>
+        </div>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h2 class="text-start fw-bolder text-topic">Information We Collect</h2>
+            <p class="lh-lg">We collect the following types of information:</p>
+            <ol class="text-black">
+                <li>Personal Information</li>
+                <p class="lh-lg">When you register or use our services, we may collect:</p>
+                <ul>
+                    <li>Full name</li>
+                    <li>Phone number and email address</li>
+                    <li>Gender and location</li>
+                    <li>Artisan details (skills, years of experience, business name, etc.)</li>
+                    <li>Profile photo or identification documents (if provided)</li>
+                </ul>
+                <li>Usage Data</li>
+                <p class="lh-lg">We automatically collect certain information about how you use our Platform,
+                    including:</p>
+                <ul>
+                    <li>IP address</li>
+                    <li>Browser type and version</li>
+                    <li>Device information</li>
+                    <li>Pages visited, time spent, and actions taken on the app</li>
+                </ul>
+                <li>Location Information</li>
+                <p class="lh-lg">With your permission, we may access your location to help customers find nearby
+                    artisans or services.</p>
+                <li>Communication Data</li>
+                <p class="lh-lg">If you contact us, we collect messages, emails, or feedback you send for support
+                    purposes.</p>
+            </ol>
+        </div>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h2 class="text-start fw-bolder text-topic">How We Use Your Information</h2>
+            <p class="lh-lg">We use your information to:</p>
+            <ul>
+                <li>Create and manage your user account.</li>
+                <li>Connect customers with artisans and vice versa.</li>
+                <li>Improve our services, user experience, and app features.</li>
+                <li>Send you service updates, notifications, and promotional offers.</li>
+                <li>Ensure security, detect fraud, and protect user data.</li>
+                <li>Comply with legal requirements or respond to lawful requests.</li>
+            </ul>
+        </div>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h2 class="text-start fw-bolder text-topic">How We Share Information</h2>
+            <p class="lh-lg">We may share your information only in these cases:</p>
+            <ul>
+                <li>With customers or artisans to complete service connections.</li>
+                <li>With trusted partners who help us operate the platform (hosting, payment, or analytics services).
+                </li>
+                <li>For legal reasons, if required by law or government authority.</li>
+                <li>During business transfers, if we merge or sell part of our business.</li>
+            </ul>
+            <p class="lh-lg">We never sell or rent your personal data to any third party.</p>
+        </div>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h2 class="text-start fw-bolder text-topic">Data Protection and Security</h2>
+            <p class="lh-lg">We take security seriously and use several measures to protect your data:</p>
+            <ul>
+                <li>Encrypted data transmission (SSL).</li>
+                <li>Secure storage on trusted cloud servers.</li>
+                <li>Limited employee access to personal data.</li>
+                <li>Regular system monitoring to prevent unauthorized access.</li>
+            </ul>
+            <p class="lh-lg">However, no system is 100% secure. We encourage users to keep login details confidential.
+            </p>
+        </div>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h2 class="text-start fw-bolder text-topic">Your Rights and Choices</h2>
+            <p class="lh-lg">You have full control over your data. You can:</p>
+            <ul>
+                <li>Access or review your personal information.</li>
+                <li>Edit or delete your account details.</li>
+                <li>Withdraw consent to data collection at any time.</li>
+                <li>Request deletion of your account permanently.</li>
+            </ul>
+            <p class="lh-lg">To exercise these rights, contact us at support@artisanconnect.com
+                .</p>
+        </div>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h2 class="text-start fw-bolder text-topic">Cookies and Tracking Technologies</h2>
+            <p class="lh-lg">We use cookies and similar technologies to:</p>
+            <ul>
+                <li>Improve your browsing experience.</li>
+                <li>Remember login details.</li>
+                <li>Analyze app performance and user behavior.</li>
+            </ul>
+            <p class="lh-lg">You can choose to disable cookies in your browser settings, though some features may stop
+                working properly.</p>
+        </div>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h2 class="text-start fw-bolder text-topic">Children’s Privacy</h2>
+            <p class="lh-lg">Our Platform is not designed for children under 13 years old.</p>
+            <p class="lh-lg">We do not knowingly collect personal information from minors. If we discover such data, we
+                will delete it immediately.</p>
+        </div>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h2 class="text-start fw-bolder text-topic">Third-Party Links</h2>
+            <p class="lh-lg">Our Platform may contain links to other websites or services.</p>
+            <p class="lh-lg">We are not responsible for the privacy practices of these third-party platforms. Please
+                review their privacy policies separately.</p>
+        </div>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h2 class="text-start fw-bolder text-topic">Retention of Data</h2>
+            <p class="lh-lg">We retain your personal data only for as long as necessary:</p>
+            <ul>
+                <li>To provide services you requested.</li>
+                <li>To comply with legal obligations.</li>
+                <li>To resolve disputes and enforce agreements.</li>
+            </ul>
+            <p class="lh-lg">Once no longer needed, your data is safely deleted or anonymized.</p>
+        </div>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h2 class="text-start fw-bolder text-topic">Updates to This Policy</h2>
+            <p class="lh-lg">We may occasionally update this Privacy Policy.</p>
+            <p class="lh-lg">When changes occur, we will post the updated version here and revise the “Last Updated”
+                date at the top of this page.</p>
+            <p class="lh-lg">We encourage you to check this page regularly to stay informed.</p>
+        </div>
+        <div class="col-11 col-md-10 col-lg-9 mx-auto">
+            <h2 class="text-start fw-bolder text-topic">Contact Us</h2>
+            <p class="lh-lg">If you have any questions or concerns about this Privacy Policy or how your data is
+                handled, please contact us:</p>
+            <div class="row col-11 col-md-10 col-lg-4">
+                <div class="shadow rounded-3 P-2">
+                    <img src="/images/whatsapp.png" class="p-3" width="20%" alt="">
+                    <span>07039692720</span>
+                </div>
+                <div class="shadow rounded-3 P-2">
+                    <img src="/images/whatsapp.png" class="p-3" width="20%" alt="">
+                    <span>07039692720</span>
+                </div>
+                <div class="shadow rounded-3 P-2">
+                    <img src="/images/whatsapp.png" class="p-3" width="20%" alt="">
+                    <span>07039692720</span>
+                </div>
+                <div class="shadow rounded-3 P-2">
+                    <img src="/images/whatsapp.png" class="p-3" width="20%" alt="">
+                    <span>07039692720</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="row flex-column-reverse flex-lg-row justify-content-around align-items-center text-center">
+            <div class=" col-11 col-xlg-4 col-xxlg-4 col-lg-5 col-sm-11 col-md-11 text-center text-white b-2">
+                © 2025 Artisan | All Rights Reserved.
+            </div>
+            <div class=" col-11 col-xlg-4 col-xxlg-4 col-lg-5 col-sm-11 col-md-11 text-center">
+                <a href="about.html" class="text-white text-decoration-none mx-2">About</a>
+                <a href="FAQ.html" class="text-white text-decoration-none mx-2">FAQ</a>
+                <a href="contact.html" class="text-white text-decoration-none mx-2">Contact</a>
+                <a href="privacy.html" class="text-white text-decoration-none mx-2">Privacy</a>
+            </div>
+        </div>
+    </footer>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+<script src="script.js"></script>
+
+</html>

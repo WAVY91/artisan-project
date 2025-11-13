@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Sign Up - Fixed</title>
+    <style>
+        :root {
+            --primary-color: #58509c;
+            --arch-color: #19194a;
+            --title-color: #8b4513;
+            --text-color: #1f2937;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --border-color: #d1d5db;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s ease-in-out;
+            --error-color: #dc2626;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        #app-wrapper {
+            width: min(420px, calc(100% - 40px));
+            max-width: 420px;
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+            border-radius: 20px;
+            margin: 24px auto 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 640px) {
+            #app-wrapper {
+                margin: 40px auto;
+            }
+        }
+
+        .top-graphic {
+            height: 120px;
+            background: var(--arch-color);
+            position: relative;
+            border-bottom-left-radius: 90% 80px;
+            border-bottom-right-radius: 90% 80px;
+        }
+
+        .content {
+            padding: 30px;
+            padding-top: 10px;
+            margin-top: -50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 8px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .content p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #6b7280;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        #message-box {
+            height: 0;
+            padding: 0;
+            margin-bottom: 0;
+
+            overflow: hidden;
+            text-align: left;
+            border-radius: 8px;
+            font-weight: 400;
+            transition: all 0.3s ease;
+        }
+
+        #message-box.error {
+            height: auto;
+            min-height: 30px;
+            margin-bottom: 1.5rem;
+            padding: 8px;
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+            font-size: 0.85rem;
+        }
+
+        #message-box.success {
+            height: auto;
+            min-height: 30px;
+            margin-bottom: 1.5rem;
+            padding: 8px;
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #10b981;
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+
+            border: 1px solid var(--border-color);
+
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            -webkit-appearance: none;
+            appearance: none;
+            background-color: #f7f7f7;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(88, 80, 156, 0.1);
+            outline: none;
+            background-color: var(--card-bg);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-container input {
+            padding-right: 40px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #9ca3af;
+        }
+
+        .form-group select {
+            background-color: #f7f7f7;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23374151' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 14px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .button-group button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color var(--transition), transform 0.1s;
+        }
+
+        .button-group button:active {
+            transform: scale(0.98);
+        }
+
+        .button-group button:first-child {
+            background-color: #f3f4f6;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .button-group button:first-child:hover {
+            background-color: var(--arch-color);
+            color: var(--card-bg);
+        }
+
+        .button-group button:last-child {
+            background-color: var(--arch-color);
+            color: var(--card-bg);
+            box-shadow: 0 4px 6px rgba(25, 25, 74, 0.3);
+        }
+
+        .button-group button:last-child:hover {
+            background-color: #2b2b64;
+        }
+
+        .login-link {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #6b7280;
+            padding-bottom: 20px;
+        }
+
+        .login-link a {
+            color: var(--arch-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-wrapper">
+        <div class="top-graphic"></div>
+
+        <div class="content">
+            <h4>Admin Sign Up</h4>
+            <p style="margin-bottom: 0.5rem;">
+                The final step in gaining full access to the **Artisan Connect** administrative console.
+            </p>
+            <p>
+                Manage service providers, oversee customer requests, and access key platform metrics. Use this account
+                for secure, high-level platform management.
+            </p>
+
+            <div id="message-box"></div>
+
+            <form onsubmit="event.preventDefault(); adSignup();">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" placeholder="Enter Email Address" id="email" />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-container">
+                        <input type="password" placeholder="Enter Password" id="password" />
+                        <span class="password-toggle" id="password-toggle-icon" onclick="togglePasswordVisibility()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-eye">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNum">Phone</label>
+                    <input type="number" placeholder="Enter Phone Number" id="phoneNum" />
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select name="Gender" id="gender">
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" onclick="adBack()">Back</button>
+                    <button type="submit">Sign Up</button>
+                </div>
+
+                <div class="login-link">
+                    Already have an account? <a href="signin.html">Sign In Here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            sendEmailVerification
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+        import {
+            getDatabase,
+            ref,
+            set
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDocTQeWER_kb6mxqNlmbv04M0339iaDDM",
+            authDomain: "project-8bb29.firebaseapp.com",
+            databaseURL: "https://project-8bb29-default-rtdb.firebaseio.com",
+            projectId: "project-8bb29",
+            storageBucket: "project-8bb29.firebasestorage.app",
+            messagingSenderId: "792700267479",
+            appId: "1:792700267479:web:d491f80fcd4c105faf3992",
+            measurementId: "G-KY94VPFHX5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+
+        const showMessage = (message, isError = true) => {
+            const messageBox = document.getElementById('message-box');
+            messageBox.textContent = message;
+
+            if (message) {
+                messageBox.className = isError ? 'error' : 'success';
+            } else {
+                messageBox.className = '';
+            }
+
+            if (isError) {
+                setTimeout(() => {
+                    messageBox.textContent = '';
+                    messageBox.className = '';
+                }, 4000);
+            }
+        };
+
+        const adSignup = () => {
+            showMessage('', false);
+
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value.trim();
+            const phone = document.getElementById('phoneNum').value.trim();
+            const gender = document.getElementById('gender').value;
+
+            if (!email || !password || !phone || !gender) {
+                showMessage('Please fill in all input fields');
+                return;
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+
+                    sendEmailVerification(user)
+                    // .then(() => {
+                    //     showMessage('Account created! Please check your inbox for verification.', false);
+                    // })
+                    // .catch(() => {
+                    //     console.log('Error sending verification email');
+                    // });
+
+                    const firstName = localStorage.getItem('firstName') || 'Admin';
+                    const lastName = localStorage.getItem('secondName') || '';
+                    const countries = localStorage.getItem('countries') || '';
+                    const state = localStorage.getItem('states') || '';
+                    const cities = localStorage.getItem('cities') || '';
+
+                    const adminData = {
+                        firstName,
+                        lastName,
+                        email,
+                        phone,
+                        countries,
+                        state,
+                        cities,
+                        gender,
+                        uid: user.uid
+                    };
+
+                    const adminRef = ref(database, `Admins/${user.uid}`);
+                    set(adminRef, adminData)
+                        .then(() => {
+                            showMessage("Account created successfully!", false);
+                            setTimeout(() => {
+                                window.location.href = 'signin.html';
+                            }, 1500);
+                        })
+                        .catch((error) => {
+                            console.error('Error saving admin data:', error);
+                        });
+
+                    document.getElementById('email').value = '';
+                    document.getElementById('password').value = '';
+                    document.getElementById('phoneNum').value = '';
+                    document.getElementById('gender').value = '';
+                })
+                .catch((error) => {
+                    if (error.code === 'auth/email-already-in-use') {
+                        showMessage('An account already exists. Please log in instead.');
+                    } else {
+                        console.log('Error:', error.message);
+                        showMessage(`Sign Up Failed: ${error.message}`);
+                    }
+                });
+        };
+
+        const adBack = () => {
+            setTimeout(() => {
+                window.location.href = 'adminsignup.html';
+            }, 1500);
+        };
+
+        const togglePasswordVisibility = () => {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('password-toggle-icon');
+
+            const eyeOpenSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-eye">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>`;
+
+            const eyeClosedSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-eye-off">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.06M4.22 4.22L21.78 21.78M1 1l1.52 1.52"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>`;
+
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.innerHTML = eyeClosedSvg;
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.innerHTML = eyeOpenSvg;
+            }
+        }
+
+        window.adSignup = adSignup;
+        window.adBack = adBack;
+        window.togglePasswordVisibility = togglePasswordVisibility;
+    </script>
+</body>
+
+</html>
