@@ -299,7 +299,7 @@
 }
 .text-hero{
   background: linear-gradient(rgba(8, 8, 8, 0.5), rgba(8, 8, 8, 0.5)),
-    url('/images/inspiration img1.jpg') center/cover no-repeat;
+    url('images/inspiration img1.jpg') center/cover no-repeat;
   display: inline-block;
   width: 100%;
   padding: 50px;
